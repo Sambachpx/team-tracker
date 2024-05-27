@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Toaster, toast } from "sonner";
-import FormButton from "@/components/formButton";
+import FormInput from "@/components/FormInput";
+import { registerUser } from "./actions";
 
 const registerFormSchema = z.object({
   email: z.string().email(),
@@ -12,20 +13,16 @@ const registerFormSchema = z.object({
   name: z.string().min(1),
 });
 
-type TregisterFormField = z.infer<typeof registerFormSchema>;
-
-const registerUser = async (data: TregisterFormField) => {
-  // TODO: call the api to register the user
-};
+type TRegisterFormFields = z.infer<typeof registerFormSchema>;
 
 export default function RegisterPage() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<TregisterFormField>({ resolver: zodResolver(registerFormSchema) });
+  } = useForm<TRegisterFormFields>({ resolver: zodResolver(registerFormSchema) });
 
-  const onSubmit = async (data: TregisterFormField) => {
+  const onSubmit = async (data: TRegisterFormFields) => {
     console.log(data);
     try {
       await registerUser(data);
@@ -39,7 +36,7 @@ export default function RegisterPage() {
     <div>
       <Toaster position="bottom-right" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormButton
+        <FormInput
           label="email"
           type="email"
           name="email"
@@ -49,8 +46,8 @@ export default function RegisterPage() {
           error={errors.email?.message}
         />
 
-        <FormButton
-          label="Password"
+        <FormInput
+          label="password"
           type="password"
           name="password"
           id="password"
@@ -59,8 +56,8 @@ export default function RegisterPage() {
           error={errors.password?.message}
         />
 
-        <FormButton
-          label="Name"
+        <FormInput
+          label="name"
           type="text"
           name="name"
           id="name"

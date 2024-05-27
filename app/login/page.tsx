@@ -4,16 +4,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Toaster, toast } from "sonner";
-import FormButton from "@/components/formButton";
+import FormInput from "@/components/FormInput";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
 
-type TloginFormField = z.infer<typeof loginFormSchema>; // change name to TloginFormField
+type TLoginFormFields = z.infer<typeof loginFormSchema>;
 
-const loginUser = async (data: TloginFormField) => {
+const loginUser = async (data: TLoginFormFields) => {
   // TODO: call the api to login the user
 };
 
@@ -23,9 +23,9 @@ export default function LoginPage() {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<TloginFormField>({ resolver: zodResolver(loginFormSchema) });
+  } = useForm<TLoginFormFields>({ resolver: zodResolver(loginFormSchema) });
 
-  const onSubmit = async (data: TloginFormField) => {
+  const onSubmit = async (data: TLoginFormFields) => {
     console.log(data);
     try {
       await loginUser(data);
@@ -42,7 +42,7 @@ export default function LoginPage() {
     <div>
       <Toaster position="bottom-right" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormButton
+        <FormInput
           label="Email"
           type="email"
           name="email"
@@ -52,7 +52,7 @@ export default function LoginPage() {
           error={errors.email?.message}
         />
 
-        <FormButton
+        <FormInput
           label="Password"
           type="password"
           name="password"

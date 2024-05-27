@@ -1,6 +1,6 @@
 import type { UseFormRegister, FieldValues, Path } from "react-hook-form";
 
-interface IFormButtonProps<T extends FieldValues> {
+interface IFormInputProps<T extends FieldValues> {
   label: string;
   type: "email" | "password" | "text";
   name: Path<T>;
@@ -10,14 +10,14 @@ interface IFormButtonProps<T extends FieldValues> {
   error?: string;
 }
 
-export default function FormButton<T extends FieldValues>({
+export default function FormInput<T extends FieldValues>({
   type,
   name,
   id,
   placeholder,
   register,
   error,
-}: IFormButtonProps<T>) {
+}: IFormInputProps<T>) {
   return (
     <label htmlFor={id}>
       <input {...register(name)} type={type} id={id} placeholder={placeholder} autoComplete="off" />
