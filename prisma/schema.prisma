@@ -32,7 +32,7 @@ model Team {
 enum Role {
   UNVERIFIED
   USER
-  ADMIN
+  ADMIN //voir pour dissocier les roles
 }
 
 model User {

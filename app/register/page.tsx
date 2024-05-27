@@ -1,4 +1,5 @@
 "use client";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -9,10 +10,10 @@ const registerFormSchema = z.object({
   name: z.string().min(1),
 });
 
-type registerFormField = z.infer<typeof registerFormSchema>;
+type TregisterFormField = z.infer<typeof registerFormSchema>;
 
-const registerUser = async (data: registerFormField) => {
-  //TODO: call the api to register the user
+const registerUser = async (data: TregisterFormField) => {
+  // TODO: call the api to register the user
 };
 
 export default function RegisterPage() {
@@ -21,11 +22,12 @@ export default function RegisterPage() {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<registerFormField>({ resolver: zodResolver(registerFormSchema) });
+  } = useForm<TregisterFormField>({ resolver: zodResolver(registerFormSchema) });
 
-  const onSubmit = async (data: registerFormField) => {
+  const onSubmit = async (data: TregisterFormField) => {
     console.log(data);
     try {
+      await registerUser(data);
     } catch (error) {
       setError("root", {
         message: "an error occurred during the registration process",
@@ -36,32 +38,35 @@ export default function RegisterPage() {
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="email"></label>
-        <input
-          {...register("email")}
-          type="string"
-          name="email"
-          id="email"
-          placeholder="example@example.com"
-          autoComplete="off"
-        />
+        <label htmlFor="email">
+          <input
+            {...register("email")}
+            type="string"
+            name="email"
+            id="email"
+            placeholder="example@example.com"
+            autoComplete="off"
+          />
+        </label>
 
         {errors.email && <div className="text-red-700">{errors.email.message}</div>}
 
-        <label htmlFor="password"></label>
-        <input
-          {...register("password")}
-          type="string"
-          name="password"
-          id="password"
-          placeholder="password"
-          autoComplete="off"
-        />
+        <label htmlFor="password">
+          <input
+            {...register("password")}
+            type="string"
+            name="password"
+            id="password"
+            placeholder="password"
+            autoComplete="off"
+          />
+        </label>
 
         {errors.password && <div className="text-red-700">{errors.password.message}</div>}
 
-        <label htmlFor="name"></label>
-        <input {...register("name")} type="string" name="name" id="name" placeholder="Samba" autoComplete="off" />
+        <label htmlFor="name">
+          <input {...register("name")} type="string" name="name" id="name" placeholder="Samba" autoComplete="off" />
+        </label>
 
         {errors.name && <div className="text-red-700">{errors.name.message}</div>}
 
