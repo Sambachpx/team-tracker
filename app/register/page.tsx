@@ -3,6 +3,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Toaster, toast } from "sonner";
+import FormButton from "@/components/formButton";
 
 const registerFormSchema = z.object({
   email: z.string().email(),
@@ -20,7 +22,6 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm<TregisterFormField>({ resolver: zodResolver(registerFormSchema) });
 
@@ -28,47 +29,45 @@ export default function RegisterPage() {
     console.log(data);
     try {
       await registerUser(data);
+      toast.success("registration successful");
     } catch (error) {
-      setError("root", {
-        message: "an error occurred during the registration process",
-      });
+      toast.error("an error occurred during the registration process");
     }
   };
 
   return (
     <div>
+      <Toaster position="bottom-right" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="email">
-          <input
-            {...register("email")}
-            type="string"
-            name="email"
-            id="email"
-            placeholder="example@example.com"
-            autoComplete="off"
-          />
-        </label>
+        <FormButton
+          label="email"
+          type="email"
+          name="email"
+          id="email"
+          placeholder="example@example.com"
+          register={register}
+          error={errors.email?.message}
+        />
 
-        {errors.email && <div className="text-red-700">{errors.email.message}</div>}
+        <FormButton
+          label="Password"
+          type="password"
+          name="password"
+          id="password"
+          placeholder="password"
+          register={register}
+          error={errors.password?.message}
+        />
 
-        <label htmlFor="password">
-          <input
-            {...register("password")}
-            type="string"
-            name="password"
-            id="password"
-            placeholder="password"
-            autoComplete="off"
-          />
-        </label>
-
-        {errors.password && <div className="text-red-700">{errors.password.message}</div>}
-
-        <label htmlFor="name">
-          <input {...register("name")} type="string" name="name" id="name" placeholder="Samba" autoComplete="off" />
-        </label>
-
-        {errors.name && <div className="text-red-700">{errors.name.message}</div>}
+        <FormButton
+          label="Name"
+          type="text"
+          name="name"
+          id="name"
+          placeholder="Samba"
+          register={register}
+          error={errors.name?.message}
+        />
 
         <button disabled={isSubmitting} type="submit">
           {isSubmitting ? "registration in progress" : "Register"}

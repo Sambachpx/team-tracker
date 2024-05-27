@@ -30,9 +30,8 @@ model Team {
 }
 
 enum Role {
-  UNVERIFIED
   USER
-  ADMIN //voir pour dissocier les roles
+  ADMIN
 }
 
 model User {
@@ -40,6 +39,7 @@ model User {
   email    String   @unique
   password String
   name     String
-  role     Role   @default(UNVERIFIED) //TODO: view for email verification with library
+  role     Role   @default(USER) 
+  isVerified  Boolean  @default(false)//TODO: view for email verification with library
   createdAt DateTime @default(now())
 }

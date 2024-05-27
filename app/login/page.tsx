@@ -3,6 +3,8 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Toaster, toast } from "sonner";
+import FormButton from "@/components/formButton";
 
 const loginFormSchema = z.object({
   email: z.string().email(),
@@ -27,40 +29,38 @@ export default function LoginPage() {
     console.log(data);
     try {
       await loginUser(data);
+      toast.success("login successful");
     } catch (error) {
       setError("root", {
         message: "an error occurred during the login process",
       });
+      toast.error("an error occurred during the login process");
     }
   };
 
   return (
     <div>
+      <Toaster position="bottom-right" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="email">
-          <input
-            {...register("email")}
-            type="string"
-            name="email"
-            id="email"
-            placeholder="example@example.com"
-            autoComplete="off"
-          />
-        </label>
+        <FormButton
+          label="Email"
+          type="email"
+          name="email"
+          id="email"
+          placeholder="example@example.com"
+          register={register}
+          error={errors.email?.message}
+        />
 
-        {errors.email && <div className="text-red-700">{errors.email.message}</div>}
-
-        <label htmlFor="password">
-          <input
-            {...register("password")} // TODO: component for button
-            type="string"
-            name="password"
-            id="password"
-            placeholder="password"
-            autoComplete="off"
-          />
-        </label>
-        {errors.password && <div className="text-red-700">{errors.password.message}</div>}
+        <FormButton
+          label="Password"
+          type="password"
+          name="password"
+          id="password"
+          placeholder="password"
+          register={register}
+          error={errors.password?.message}
+        />
 
         <button disabled={isSubmitting} type="submit">
           {isSubmitting ? "login in progress" : "Login"}
