@@ -29,10 +29,17 @@ model Team {
   players   Player[]
 }
 
+enum Role {
+  UNVERIFIED
+  USER
+  ADMIN
+}
+
 model User {
   id       Int      @id @default(autoincrement())
   email    String   @unique
   password String
   name     String
-  role     String   @default("unverified")
+  role     Role   @default(UNVERIFIED) //TODO: view for email verification with library
+  createdAt DateTime @default(now())
 }
