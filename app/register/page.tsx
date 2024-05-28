@@ -2,16 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import type { z } from "zod";
 import { Toaster, toast } from "sonner";
 import FormInput from "@/components/FormInput";
-import { registerUser } from "./actions";
-
-const registerFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  name: z.string().min(1),
-});
+import { registerFormSchema, registerUser } from "./actions";
 
 type TRegisterFormFields = z.infer<typeof registerFormSchema>;
 

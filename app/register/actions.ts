@@ -1,11 +1,13 @@
 "use server";
 
-import { prisma } from "@/utils/prisma";
+import prisma from "@/utils/prisma";
 import { z } from "zod";
 
-const registerFormSchema = z.object({
+// password hasher
+
+export const registerFormSchema = z.object({
   name: z.string().min(1),
-  email: z.string().email(),
+  email: z.string().email(), // type et schema dans un fichier zod
   password: z.string().min(8),
 });
 
@@ -24,8 +26,6 @@ export const registerUser = async (data: TRegisterFormFields) => {
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
-
-    console.log("Existing user:", existingUser);
 
     if (existingUser) {
       throw new Error("user with this email already exists");
