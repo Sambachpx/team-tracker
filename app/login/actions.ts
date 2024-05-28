@@ -1,5 +1,5 @@
 "use server";
-
+/*
 import { loginFormSchema } from "@/utils/form/formSchemas";
 import type { TLoginFormFields } from "@/utils/form/types";
 import { prisma } from "@/utils/prisma";
@@ -35,3 +35,4 @@ export const loginUser = async (data: TLoginFormFields) => {
     throw new Error("error");
   }
 };
+*/

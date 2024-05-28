@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster, toast } from "sonner";
 import FormInput from "@/components/FormInput";
 import { loginFormSchema } from "@/utils/form/formSchemas";
+import { signIn } from "next-auth/react";
 import type { TLoginFormFields } from "@/utils/form/types";
-import { loginUser } from "./actions";
 
 export default function LoginPage() {
   const {
@@ -17,10 +17,24 @@ export default function LoginPage() {
   } = useForm<TLoginFormFields>({ resolver: zodResolver(loginFormSchema) });
 
   const onSubmit = async (data: TLoginFormFields) => {
-    console.log(data);
+    console.log("1ère actions après le submit du formulaire de login");
     try {
-      await loginUser(data);
-      toast.success("login successful");
+      const result = await signIn("credentials", {
+        redirect: false, // TODO: change to true
+        email: data.email,
+        password: data.password,
+      });
+
+      console.log("2ème actions sign in result: ", result);
+
+      if (result?.error) {
+        setError("root", {
+          message: result.error || "an error occurred during the login process",
+        });
+        toast.error(result.error || "an error occurred during the login process");
+      } else {
+        toast.success("login successful");
+      }
     } catch (error) {
       setError("root", {
         message: "an error occurred during the login process",
