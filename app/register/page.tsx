@@ -5,7 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 import { Toaster, toast } from "sonner";
 import FormInput from "@/components/FormInput";
-import { registerFormSchema, registerUser } from "./actions";
+import { registerFormSchema } from "@/utils/form/formSchemas";
+import { registerUser } from "./actions";
 
 type TRegisterFormFields = z.infer<typeof registerFormSchema>;
 

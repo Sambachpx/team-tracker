@@ -1,17 +1,10 @@
 "use server";
 
+import { registerFormSchema } from "@/utils/form/formSchemas";
+import type { TRegisterFormFields } from "@/utils/form/types";
 import prisma from "@/utils/prisma";
-import { z } from "zod";
 
 // password hasher
-
-export const registerFormSchema = z.object({
-  name: z.string().min(1),
-  email: z.string().email(), // type et schema dans un fichier zod
-  password: z.string().min(8),
-});
-
-type TRegisterFormFields = z.infer<typeof registerFormSchema>;
 
 export const registerUser = async (data: TRegisterFormFields) => {
   const validatedData = registerFormSchema.safeParse(data);

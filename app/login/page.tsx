@@ -2,16 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Toaster, toast } from "sonner";
 import FormInput from "@/components/FormInput";
-
-const loginFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-});
-
-type TLoginFormFields = z.infer<typeof loginFormSchema>;
+import { loginFormSchema } from "@/utils/form/formSchemas";
+import type { TLoginFormFields } from "@/utils/form/types";
 
 const loginUser = async (data: TLoginFormFields) => {
   // TODO: call the api to login the user
