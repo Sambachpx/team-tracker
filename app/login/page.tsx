@@ -6,14 +6,11 @@ import { Toaster, toast } from "sonner";
 import FormInput from "@/components/FormInput";
 import { loginFormSchema } from "@/utils/form/formSchemas";
 import type { TLoginFormFields } from "@/utils/form/types";
-
-const loginUser = async (data: TLoginFormFields) => {
-  // TODO: call the api to login the user
-};
+import { loginUser } from "./actions";
 
 export default function LoginPage() {
   const {
-    register, // TODO: change register
+    register,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },

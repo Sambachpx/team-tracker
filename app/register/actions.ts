@@ -2,9 +2,10 @@
 
 import { registerFormSchema } from "@/utils/form/formSchemas";
 import type { TRegisterFormFields } from "@/utils/form/types";
-import prisma from "@/utils/prisma";
+import { prisma } from "@/utils/prisma";
+import bcrypt from "bcrypt";
 
-// password hasher
+const saltRounds = 10;
 
 export const registerUser = async (data: TRegisterFormFields) => {
   const validatedData = registerFormSchema.safeParse(data);
@@ -24,11 +25,13 @@ export const registerUser = async (data: TRegisterFormFields) => {
       throw new Error("user with this email already exists");
     }
 
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const user = await prisma.user.create({
       data: {
         name,
         email,
-        password,
+        password: hashedPassword,
       },
     });
 
