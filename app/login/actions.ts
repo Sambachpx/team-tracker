@@ -1,5 +1,8 @@
 "use server";
 /*
+
+TODO: DELETE CONTENT OF THIS FILE
+
 import { loginFormSchema } from "@/utils/form/formSchemas";
 import type { TLoginFormFields } from "@/utils/form/types";
 import { prisma } from "@/utils/prisma";
