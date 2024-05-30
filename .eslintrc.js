@@ -17,7 +17,6 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:@typescript-eslint/strict",
-    "turbo",
     "prettier",
   ],
   plugins: ["@typescript-eslint", "import"],
@@ -62,5 +61,5 @@ module.exports = {
     "no-console": [1, { allow: ["error"] }],
     "no-void": [2, { allowAsStatement: true }],
   },
-  ignorePatterns: ["**/*.js", "**/*.json", "node_modules", "public", "styles", ".next", "coverage", "dist", ".turbo"],
+  ignorePatterns: ["**/*.js", "**/*.json", "node_modules", "public", "styles", ".next", "coverage", "dist"],
 };
