@@ -6,6 +6,7 @@ import { Toaster, toast } from "sonner";
 import FormInput from "@/components/FormInput";
 import { playerFormSchema } from "@/utils/zod/player";
 import type { TPlayerFormFields } from "@/utils/zod/player";
+import { useSession } from "next-auth/react";
 // import { addPlayer } from "./actions"; //TODO: uncomment this line after implementing the addPlayer function
 
 export default function PlayerForm() {
@@ -26,6 +27,12 @@ export default function PlayerForm() {
       toast.error("An error occurred during the player registration process");
     }
   };
+
+  const { data: session } = useSession();
+
+  if (!session || !session.user) {
+    return <div>You need to be logged in to add a player</div>;
+  }
 
   return (
     <div>

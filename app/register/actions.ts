@@ -3,7 +3,7 @@
 import { prisma } from "@/utils/prisma/prisma";
 import type { TRegisterFormFields } from "@/utils/zod/user";
 import { registerFormSchema } from "@/utils/zod/user";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const saltRounds = 10;
 
