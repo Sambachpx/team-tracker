@@ -9,7 +9,15 @@ export default async function Home() {
     <main className="flex min-h-screen">
       <h1>
         {session && session.user ? (
-          `welcome to the app ${session.user.name}`
+          <>
+            {`welcome to the app ${session.user.name}`}
+            <Button asChild>
+              <Link href="/player">create a player</Link>
+            </Button>
+            <Button asChild>
+              <Link href="/team">create a team</Link>
+            </Button>
+          </>
         ) : (
           <div>
             <Button asChild>

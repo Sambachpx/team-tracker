@@ -7,28 +7,31 @@ import FormInput from "@/components/FormInput";
 import { playerFormSchema } from "@/utils/zod/player";
 import type { TPlayerFormFields } from "@/utils/zod/player";
 import { useSession } from "next-auth/react";
-// import { addPlayer } from "./actions"; //TODO: uncomment this line after implementing the addPlayer function
+import { addPlayer } from "./actions";
 
 export default function PlayerForm() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm<TPlayerFormFields>({ resolver: zodResolver(playerFormSchema) });
 
-  const onSubmit = (data: TPlayerFormFields) => {
+  const onSubmit = async (data: TPlayerFormFields) => {
     console.log(data);
+
     try {
-      //  await addPlayer(data);
-      toast.success("Player added successfully");
-      reset();
+      const player = await addPlayer(data);
+      console.log("player added:", player);
+      toast.success("player added successfully");
     } catch (error) {
-      toast.error("An error occurred during the player registration process");
+      console.error("error adding player:", error);
+      toast.error("an error occurred during the player registration process");
     }
   };
 
   const { data: session } = useSession();
+
+  console.log("session", session);
 
   if (!session || !session.user) {
     return <div>You need to be logged in to add a player</div>;
@@ -37,7 +40,7 @@ export default function PlayerForm() {
   return (
     <div>
       <Toaster position="bottom-right" />
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)}>
         <FormInput
           label="Name"
           type="text"

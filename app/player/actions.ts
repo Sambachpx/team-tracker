@@ -1,3 +1,5 @@
+"use server";
+
 import { prisma } from "@/utils/prisma/prisma";
 import type { TPlayerFormFields } from "@/utils/zod/player";
 import { playerFormSchema } from "@/utils/zod/player";
@@ -9,28 +11,21 @@ export const addPlayer = async (data: TPlayerFormFields) => {
     throw new Error("invalid form data");
   }
 
-  const { name, salary, teamId } = validatedData.data;
+  const { name, salary, teamId, image } = validatedData.data;
 
   try {
-    const existingPlayer = await prisma.player.findFirst({
-      where: { name },
-    });
-
-    if (existingPlayer) {
-      throw new Error("player with this name already exists");
-    }
-
     const player = await prisma.player.create({
       data: {
         name,
-        salary,
-        teamId,
+        salary: Number(salary),
+        teamId: Number(teamId),
+        image,
       },
     });
 
     return player;
   } catch (error) {
-    console.error(error);
+    console.error("error addplayer:", error);
     throw new Error("error");
   }
 };
