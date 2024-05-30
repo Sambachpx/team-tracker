@@ -1,8 +1,8 @@
 "use server";
 
-import { registerFormSchema } from "@/utils/form/formSchemas";
-import type { TRegisterFormFields } from "@/utils/form/types";
-import { prisma } from "@/utils/prisma";
+import { prisma } from "@/utils/prisma/prisma";
+import type { TRegisterFormFields } from "@/utils/zod/user";
+import { registerFormSchema } from "@/utils/zod/user";
 import bcrypt from "bcrypt";
 
 const saltRounds = 10;

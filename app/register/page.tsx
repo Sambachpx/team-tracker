@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 import { Toaster, toast } from "sonner";
 import FormInput from "@/components/FormInput";
-import { registerFormSchema } from "@/utils/form/formSchemas";
+import { registerFormSchema } from "@/utils/zod/user";
 import { registerUser } from "./actions";
 
 type TRegisterFormFields = z.infer<typeof registerFormSchema>;
@@ -14,6 +14,7 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<TRegisterFormFields>({ resolver: zodResolver(registerFormSchema) });
 
@@ -22,6 +23,7 @@ export default function RegisterPage() {
     try {
       await registerUser(data);
       toast.success("registration successful");
+      reset();
     } catch (error) {
       toast.error("an error occurred during the registration process");
     }
@@ -64,8 +66,6 @@ export default function RegisterPage() {
         <button disabled={isSubmitting} type="submit">
           {isSubmitting ? "registration in progress" : "Register"}
         </button>
-
-        {errors.root && <div className="text-red-700">{errors.root.message}</div>}
       </form>
     </div>
   );

@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 interface IFormInputProps<T extends FieldValues> {
   label: string;
-  type: "email" | "password" | "text";
+  type: "email" | "number" | "password" | "text";
   name: Path<T>;
   id: string;
   placeholder: string;

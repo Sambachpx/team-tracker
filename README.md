@@ -1,25 +1,26 @@
-# Projet Team-tracker : Application CRUD pour joeur
+# Team-tracker project: CRUD application for players
 
 ## Description
 
-Team-tracker permet de gérer une liste de joueurs de foot. Voici les fonctionnalités :
+Team-tracker allows you to manage a list of football players. Here are the features:
 
-- Créer, lire, mettre à jour et supprimer des joueurs (CRUD)
-- Visualiser la liste des joueurs avec tri et filtrage
-- Ajouter et modifier des joueurs via des formulaires
-- Stocker les images des joueurs
-- Déploiement sur Vercel
+- Create, read, update and delete players (CRUD)
+- View the player list with sorting and filtering
+- Add and edit players via forms
+- Store player images
+- Deployment on Vercel
 
 ## Technologies
 
 - Next.js
 - React Hook Form
 - Prisma
-- Server Actions
-- Stockage de documents (images)
+-Server Actions
+- Storage of documents (images)
 
 ## Configuration
 
-1. Cloner le dépôt
-2. Installer les dépendances (`pnpm install`)
-3. Démarrer le serveur de développement (`pnpm run dev`)
+1. Clone the repository
+2. Install dependencies (`pnpm install`)
+3. Create a `.env` file in the root directory and add the following variables:
+4. Start the development server (`pnpm run dev`)

@@ -11,4 +11,5 @@ export const loginFormSchema = z.object({
   password: z.string(),
 });
 
-// utils/zod zod user.ts
+export type TRegisterFormFields = z.infer<typeof registerFormSchema>;
+export type TLoginFormFields = z.infer<typeof loginFormSchema>;
