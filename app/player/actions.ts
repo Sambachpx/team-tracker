@@ -17,8 +17,8 @@ export const addPlayer = async (data: TPlayerFormFields) => {
     const player = await prisma.player.create({
       data: {
         name,
-        salary: Number(salary),
-        teamId: Number(teamId),
+        salary,
+        teamId,
         image,
       },
     });

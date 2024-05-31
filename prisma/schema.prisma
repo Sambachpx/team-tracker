@@ -16,9 +16,10 @@ datasource db {
 
 model Player {
   id        Int      @id @default(autoincrement())
-  name      String
+  firstName String
+  lastName  String
   salary    Float
-  team      Team?     @relation(fields: [teamId], references: [id])
+  team      Team?    @relation(fields: [teamId], references: [id])
   teamId    Int?
   image     String?  //TODO: view for the type of image and how to store it
 }
@@ -27,6 +28,8 @@ model Team {
   id        Int      @id @default(autoincrement())
   name      String   @unique
   players   Player[]
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
 }
 
 enum Role {
@@ -41,5 +44,5 @@ model User {
   role     Role   @default(USER) 
   isVerified  Boolean  @default(false)//TODO: view for email verification with library
   createdAt DateTime @default(now())
-
+  teams     Team[]
 }

@@ -4,7 +4,7 @@ import { prisma } from "@/utils/prisma/prisma";
 import type { TTeamFormFields } from "@/utils/zod/team";
 import { teamFormSchema } from "@/utils/zod/team";
 
-export const addTeam = async (data: TTeamFormFields) => {
+export const addTeam = async (data: TTeamFormFields, userId: string) => {
   const validatedData = teamFormSchema.safeParse(data);
 
   if (!validatedData.success) {
@@ -25,6 +25,7 @@ export const addTeam = async (data: TTeamFormFields) => {
     const team = await prisma.team.create({
       data: {
         name,
+        userId: parseInt(userId, 10),
       },
     });
 

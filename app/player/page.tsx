@@ -12,16 +12,16 @@ export default function PlayerForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<TPlayerFormFields>({ resolver: zodResolver(playerFormSchema) });
 
   const onSubmit = async (data: TPlayerFormFields) => {
     console.log(data);
-
     try {
-      const player = await addPlayer(data);
-      console.log("player added:", player);
+      await addPlayer(data);
       toast.success("player added successfully");
+      reset();
     } catch (error) {
       console.error("error adding player:", error);
       toast.error("an error occurred during the player registration process");
