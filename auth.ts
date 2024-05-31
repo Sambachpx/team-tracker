@@ -14,13 +14,4 @@ export const {
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   ...authConfig,
-  callbacks: {
-    authorized({ request, auth }) {
-      const { pathname } = request.nextUrl;
-
-      if (pathname === "/middlewareProtected") return !!auth;
-
-      return true;
-    },
-  },
 });
