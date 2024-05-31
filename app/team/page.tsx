@@ -2,23 +2,31 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Toaster } from "sonner";
+import { toast, Toaster } from "sonner";
 import FormInput from "@/components/FormInput";
 import { teamFormSchema } from "@/utils/zod/team";
 import type { TTeamFormFields } from "@/utils/zod/team";
+import { addTeam } from "./actions";
 
 export default function TeamForm() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<TTeamFormFields>({ resolver: zodResolver(teamFormSchema) });
 
-  const onSubmit = (data: TTeamFormFields) => {
+  const onSubmit = async (data: TTeamFormFields) => {
     console.log(data);
+    try {
+      await addTeam(data);
+      toast.success("team added successfully");
+      reset();
+    } catch (error) {
+      console.error("error adding team:", error);
+      toast.error("an error occurred during the team registration process");
+    }
   };
-
-  // add toast
 
   return (
     <div>
