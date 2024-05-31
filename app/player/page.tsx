@@ -52,15 +52,15 @@ export default function PlayerForm() {
           error={errors.salary?.message}
         />
 
-        <FormInput
-          label="Team ID"
-          type="number"
-          name="teamId"
-          id="teamId"
-          placeholder="Team ID"
-          register={register}
-          error={errors.teamId?.message}
-        />
+        <select name="team" id="team-select">
+          <option>--Please choose a team--</option>
+          <option value="psg">Paris Saint-Germain</option>
+          <option value="barcelona">FC Barcelone</option>
+          <option value="realMadrid">Real Madrid</option>
+          <option value="manchesterUnited">Manchester United</option>
+          <option value="bayernMunich">Bayern Munich</option>
+          <option value="juventus">Juventus</option>
+        </select>
 
         <button disabled={isSubmitting} type="submit">
           {isSubmitting ? "adding player..." : "add Player"}

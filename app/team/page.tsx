@@ -32,15 +32,6 @@ export default function TeamForm() {
           error={errors.name?.message}
         />
 
-        <label htmlFor="player">
-          Players:
-          <select id="player" {...register("players")} multiple>
-            <option value="player1">vbn</option>
-            <option value="player2">vbn,;:</option>
-          </select>
-          {errors.players && <p>{errors.players.message}</p>}
-        </label>
-
         <button disabled={isSubmitting} type="submit">
           {isSubmitting ? "adding team..." : "add Team"}
         </button>
