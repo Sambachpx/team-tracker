@@ -7,7 +7,7 @@ import FormInput from "@/components/FormInput";
 import { loginFormSchema } from "@/utils/zod/user";
 import { signIn } from "next-auth/react";
 import type { TLoginFormFields } from "@/utils/zod/user";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -32,7 +32,7 @@ export default function LoginPage() {
       } else {
         toast.success("login successful");
         reset();
-        router.push("/dashboard");
+        router.push("/");
       }
     } catch (error) {
       if (error instanceof Error) {
