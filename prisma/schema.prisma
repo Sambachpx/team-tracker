@@ -28,8 +28,8 @@ model Team {
   id        Int      @id @default(autoincrement())
   name      String   @unique
   players   Player[]
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+  user      User?     @relation(fields: [userId], references: [id])
+  userId    Int?
 }
 
 enum Role {

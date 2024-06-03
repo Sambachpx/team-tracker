@@ -6,7 +6,6 @@ import { toast, Toaster } from "sonner";
 import FormInput from "@/components/FormInput";
 import { teamFormSchema } from "@/utils/zod/team";
 import type { TTeamFormFields } from "@/utils/zod/team";
-import { authHandler } from "@/auth";
 import { addTeam } from "./actions";
 
 export default function TeamForm() {
@@ -20,14 +19,7 @@ export default function TeamForm() {
   const onSubmit = async (data: TTeamFormFields) => {
     console.log(data);
     try {
-      const session = await authHandler();
-      const userId = session?.user?.id;
-
-      if (!userId) {
-        throw new Error("user not found");
-      }
-
-      await addTeam(data, userId);
+      await addTeam(data);
       toast.success("team added successfully");
       reset();
     } catch (error) {

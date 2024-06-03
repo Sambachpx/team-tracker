@@ -35,11 +35,21 @@ export default function PlayerForm() {
         <FormInput
           label="Name"
           type="text"
-          name="name"
+          name="firstName"
           id="name"
-          placeholder="Player Name"
+          placeholder="First Name"
           register={register}
-          error={errors.name?.message}
+          error={errors.firstName?.message}
+        />
+
+        <FormInput
+          label="Name"
+          type="text"
+          name="lastName"
+          id="name"
+          placeholder="Last Name"
+          register={register}
+          error={errors.lastName?.message}
         />
 
         <FormInput

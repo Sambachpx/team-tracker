@@ -11,12 +11,13 @@ export const addPlayer = async (data: TPlayerFormFields) => {
     throw new Error("invalid form data");
   }
 
-  const { name, salary, teamId, image } = validatedData.data;
+  const { firstName, lastName, salary, teamId, image } = validatedData.data;
 
   try {
     const player = await prisma.player.create({
       data: {
-        name,
+        firstName,
+        lastName,
         salary,
         teamId,
         image,

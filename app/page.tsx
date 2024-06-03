@@ -21,9 +21,6 @@ export default async function Home() {
         ) : (
           <div>
             <Button asChild>
-              <Link href="/middlewareProtected">middleware page</Link>
-            </Button>
-            <Button asChild>
               <Link href="/">Home</Link>
             </Button>
             <Button asChild>
