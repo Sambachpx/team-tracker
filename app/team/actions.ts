@@ -44,3 +44,55 @@ export const addTeam = async (data: TTeamFormFields) => {
     throw new Error("error");
   }
 };
+
+export const deleteTeam = async (id: number) => {
+  try {
+    const team = await prisma.team.delete({
+      where: {
+        id,
+      },
+    });
+
+    return team;
+  } catch (error) {
+    console.error("error deleteTeam:", error);
+    throw new Error("error");
+  }
+};
+
+export const updateTeam = async (id: number, data: TTeamFormFields) => {
+  const validatedData = teamFormSchema.safeParse(data);
+
+  if (!validatedData.success) {
+    throw new Error("invalid form data");
+  }
+
+  const { name } = validatedData.data;
+
+  try {
+    const team = await prisma.team.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+      },
+    });
+
+    return team;
+  } catch (error) {
+    console.error("error updateTeam:", error);
+    throw new Error("error");
+  }
+};
+
+export const getTeams = async () => {
+  try {
+    const teams = await prisma.team.findMany();
+
+    return teams;
+  } catch (error) {
+    console.error("error getTeams:", error);
+    throw new Error("error");
+  }
+};

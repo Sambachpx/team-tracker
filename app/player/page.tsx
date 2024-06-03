@@ -6,7 +6,9 @@ import { Toaster, toast } from "sonner";
 import FormInput from "@/components/FormInput";
 import { playerFormSchema } from "@/utils/zod/player";
 import type { TPlayerFormFields } from "@/utils/zod/player";
+import { useEffect, useState } from "react";
 import { addPlayer } from "./actions";
+import { getTeams } from "../team/actions";
 
 export default function PlayerForm() {
   const {
@@ -15,6 +17,22 @@ export default function PlayerForm() {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<TPlayerFormFields>({ resolver: zodResolver(playerFormSchema) });
+
+  const [teams, setTeams] = useState([]);
+
+  /* useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const teamsData = await getTeams();
+        setTeams(teamsData);
+      } catch (error) {
+        toast.error("failed to load teams");
+      }
+    };
+
+    // fetchTeams();
+  }, []);
+  */
 
   const onSubmit = async (data: TPlayerFormFields) => {
     console.log(data);
