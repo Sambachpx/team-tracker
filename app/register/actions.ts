@@ -38,6 +38,6 @@ export const registerUser = async (data: TRegisterFormFields) => {
     return user;
   } catch (error) {
     console.error(error);
-    throw new Error("error");
+    throw error;
   }
 };

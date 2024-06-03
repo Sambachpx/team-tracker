@@ -7,8 +7,11 @@ import FormInput from "@/components/FormInput";
 import { loginFormSchema } from "@/utils/zod/user";
 import { signIn } from "next-auth/react";
 import type { TLoginFormFields } from "@/utils/zod/user";
+import { useRouter } from "next/router";
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -29,9 +32,14 @@ export default function LoginPage() {
       } else {
         toast.success("login successful");
         reset();
+        router.push("/dashboard");
       }
     } catch (error) {
-      toast.error("an error occurred during the login process");
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("an error occurred during the login process");
+      }
     }
   };
 

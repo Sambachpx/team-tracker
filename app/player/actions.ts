@@ -27,7 +27,7 @@ export const addPlayer = async (data: TPlayerFormFields) => {
     return player;
   } catch (error) {
     console.error("error addplayer:", error);
-    throw new Error("error");
+    throw error;
   }
 };
 
@@ -42,7 +42,7 @@ export const deletePlayer = async (id: number) => {
     return player;
   } catch (error) {
     console.error("error deletePlayer:", error);
-    throw new Error("error");
+    throw error;
   }
 };
 
@@ -72,7 +72,7 @@ export const updatePlayer = async (id: number, data: TPlayerFormFields) => {
     return player;
   } catch (error) {
     console.error("error updatePlayer:", error);
-    throw new Error("error");
+    throw error;
   }
 };
 
@@ -83,6 +83,6 @@ export const getPlayers = async () => {
     return players;
   } catch (error) {
     console.error("error getPlayers:", error);
-    throw new Error("error");
+    throw error;
   }
 };

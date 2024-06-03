@@ -7,32 +7,33 @@ import FormInput from "@/components/FormInput";
 import { playerFormSchema } from "@/utils/zod/player";
 import type { TPlayerFormFields } from "@/utils/zod/player";
 import { useEffect, useState } from "react";
+import type { Team } from "@prisma/client";
 import { addPlayer } from "./actions";
 import { getTeams } from "../team/actions";
 
 export default function PlayerForm() {
+  const [teams, setTeams] = useState<Team[]>([]);
+
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const teamsData = await getTeams();
+        setTeams(teamsData);
+      } catch (error) {
+        console.error("Error fetching teams:", error);
+        toast.error("Failed to load teams");
+      }
+    };
+
+    fetchTeams().catch((e) => console.error("error fetching teams:", e));
+  }, []);
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<TPlayerFormFields>({ resolver: zodResolver(playerFormSchema) });
-
-  const [teams, setTeams] = useState([]);
-
-  /* useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const teamsData = await getTeams();
-        setTeams(teamsData);
-      } catch (error) {
-        toast.error("failed to load teams");
-      }
-    };
-
-    // fetchTeams();
-  }, []);
-  */
 
   const onSubmit = async (data: TPlayerFormFields) => {
     console.log(data);
@@ -41,7 +42,10 @@ export default function PlayerForm() {
       toast.success("player added successfully");
       reset();
     } catch (error) {
-      console.error("error adding player:", error);
+      if (error instanceof Error) {
+        console.error("error adding player:", error);
+        toast.error(error.message);
+      } else console.error("an error occurred during the player registration process", error);
       toast.error("an error occurred during the player registration process");
     }
   };
@@ -81,13 +85,11 @@ export default function PlayerForm() {
         />
 
         <select name="team" id="team-select">
-          <option>--Please choose a team--</option>
-          <option value="psg">Paris Saint-Germain</option>
-          <option value="barcelona">FC Barcelone</option>
-          <option value="realMadrid">Real Madrid</option>
-          <option value="manchesterUnited">Manchester United</option>
-          <option value="bayernMunich">Bayern Munich</option>
-          <option value="juventus">Juventus</option>
+          {teams.map((team) => (
+            <option key={team.id} value={team.id}>
+              {team.name}
+            </option>
+          ))}
         </select>
 
         <button disabled={isSubmitting} type="submit">

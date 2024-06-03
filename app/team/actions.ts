@@ -17,10 +17,6 @@ export const addTeam = async (data: TTeamFormFields) => {
   console.log("session", session);
   const userId = session?.user?.id;
 
-  /* if (!userId) {
-    throw new Error("user not found");
-  } */
-
   try {
     const existingTeam = await prisma.team.findFirst({
       where: { name },
@@ -34,7 +30,6 @@ export const addTeam = async (data: TTeamFormFields) => {
       data: {
         name,
         userId: userId ? parseInt(userId, 10) : undefined,
-        // userId: parseInt(userId, 10),
       },
     });
 

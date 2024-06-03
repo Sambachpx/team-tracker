@@ -25,7 +25,13 @@ export default function RegisterPage() {
       toast.success("registration successful");
       reset();
     } catch (error) {
-      toast.error("an error occurred during the registration process");
+      if (error instanceof Error) {
+        console.error("error registering user:", error);
+        toast.error(error.message);
+      } else {
+        console.error("an error occurred during the registration process", error);
+        toast.error("an error occurred during the registration process");
+      }
     }
   };
 

@@ -14,7 +14,7 @@ export default {
 
       authorize: async (credentials) => {
         if (typeof credentials.email !== "string" || typeof credentials.password !== "string") {
-          return null;
+          throw new Error("invalid credentials");
         }
 
         const user = await prisma.user.findUnique({
@@ -22,13 +22,13 @@ export default {
         });
 
         if (!user) {
-          return null;
+          throw new Error("user not found");
         }
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
 
         if (!isValid) {
-          return null;
+          throw new Error("invalid password");
         }
 
         return { ...user, id: user.id.toString() };
