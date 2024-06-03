@@ -6,11 +6,14 @@ import type { z } from "zod";
 import { Toaster, toast } from "sonner";
 import FormInput from "@/components/FormInput";
 import { registerFormSchema } from "@/utils/zod/user";
+import { useRouter } from "next/navigation";
 import { registerUser } from "./actions";
 
 type TRegisterFormFields = z.infer<typeof registerFormSchema>;
 
 export default function RegisterPage() {
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -24,6 +27,7 @@ export default function RegisterPage() {
       await registerUser(data);
       toast.success("registration successful");
       reset();
+      router.push("/login");
     } catch (error) {
       if (error instanceof Error) {
         console.error("error registering user:", error);

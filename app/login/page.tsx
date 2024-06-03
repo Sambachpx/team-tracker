@@ -22,7 +22,7 @@ export default function LoginPage() {
   const onSubmit = async (data: TLoginFormFields) => {
     try {
       const result = await signIn("credentials", {
-        redirect: false, // TODO: change to true
+        redirect: false,
         email: data.email,
         password: data.password,
       });
