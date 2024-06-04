@@ -36,7 +36,7 @@ export const addTeam = async (data: TTeamFormFields) => {
     return team;
   } catch (error) {
     console.error("error addTeam:", error);
-    throw new Error("error");
+    throw error;
   }
 };
 
@@ -51,7 +51,7 @@ export const deleteTeam = async (id: number) => {
     return team;
   } catch (error) {
     console.error("error deleteTeam:", error);
-    throw new Error("error");
+    throw error;
   }
 };
 
@@ -77,7 +77,7 @@ export const updateTeam = async (id: number, data: TTeamFormFields) => {
     return team;
   } catch (error) {
     console.error("error updateTeam:", error);
-    throw new Error("error");
+    throw error;
   }
 };
 
@@ -88,6 +88,6 @@ export const getTeams = async () => {
     return teams;
   } catch (error) {
     console.error("error getTeams:", error);
-    throw new Error("error");
+    throw error;
   }
 };
