@@ -23,8 +23,13 @@ export default function TeamForm() {
       toast.success("team added successfully");
       reset();
     } catch (error) {
-      console.error("error adding team:", error);
-      toast.error("an error occurred during the team registration process");
+      if (error instanceof Error) {
+        console.error("error adding team:", error);
+        toast.error(error.message);
+      } else {
+        console.error("error adding team:", error);
+        toast.error("an error occurred during the team registration process");
+      }
     }
   };
 
