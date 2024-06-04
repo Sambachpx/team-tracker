@@ -8,6 +8,7 @@ import { loginFormSchema } from "@/utils/zod/user";
 import { signIn } from "next-auth/react";
 import type { TLoginFormFields } from "@/utils/zod/user";
 import { useRouter } from "next/navigation";
+import SubmitButton from "@/components/submitButton";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -67,9 +68,7 @@ export default function LoginPage() {
           error={errors.password?.message}
         />
 
-        <button disabled={isSubmitting} type="submit">
-          {isSubmitting ? "login in progress" : "Login"}
-        </button>
+        <SubmitButton isSubmitting={isSubmitting} text="login" />
 
         {errors.root && <div className="text-red-700">{errors.root.message}</div>}
       </form>

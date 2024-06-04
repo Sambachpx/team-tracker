@@ -7,6 +7,7 @@ import { Toaster, toast } from "sonner";
 import FormInput from "@/components/FormInput";
 import { registerFormSchema } from "@/utils/zod/user";
 import { useRouter } from "next/navigation";
+import SubmitButton from "@/components/submitButton";
 import { registerUser } from "./actions";
 
 type TRegisterFormFields = z.infer<typeof registerFormSchema>;
@@ -73,9 +74,7 @@ export default function RegisterPage() {
           error={errors.name?.message}
         />
 
-        <button disabled={isSubmitting} type="submit">
-          {isSubmitting ? "registration in progress" : "Register"}
-        </button>
+        <SubmitButton isSubmitting={isSubmitting} text="register" />
       </form>
     </div>
   );

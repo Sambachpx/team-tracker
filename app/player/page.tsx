@@ -1,53 +1,17 @@
-import { useForm } from "react-hook-form";
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster, toast } from "sonner";
 import FormInput from "@/components/FormInput";
 import { playerFormSchema } from "@/utils/zod/player";
 import type { TPlayerFormFields } from "@/utils/zod/player";
-import type { Team } from "@prisma/client";
+import SubmitButton from "@/components/submitButton";
+import { useForm } from "react-hook-form";
+import useFetchTeams from "./fetchTeams";
 import { addPlayer } from "./actions";
-import { getTeams } from "../team/actions";
 
-export async function remplace() {
-  try {
-    const teams = await getTeams();
-
-    return {
-      props: {
-        teams,
-      },
-    };
-  } catch (error) {
-    console.error("error :", error);
-
-    return {
-      props: {
-        teams: [],
-      },
-    };
-  }
-}
-
-export default function PlayerForm({ teams }: { teams: Team[] }) {
-  // const [teamss, setTeams] = useState<Team[]>([]);
-
-  /* useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const teamsData = await getTeams();
-        setTeams(teamsData);
-      } catch (error) {
-        console.error("Error fetching teams:", error);
-        toast.error("Failed to load teams");
-      }
-    };
-    
-
-    fetchTeams().catch((e) => console.error("error fetching teams:", e));
-  }, []);
-
-  */
-
+export default function PlayerForm() {
+  const teams = useFetchTeams();
   const {
     register,
     handleSubmit,
@@ -56,16 +20,11 @@ export default function PlayerForm({ teams }: { teams: Team[] }) {
   } = useForm<TPlayerFormFields>({ resolver: zodResolver(playerFormSchema) });
 
   const onSubmit = async (data: TPlayerFormFields) => {
-    console.log(data);
     try {
       await addPlayer(data);
       toast.success("player added successfully");
       reset();
     } catch (error) {
-      if (error instanceof Error) {
-        console.error("error adding player:", error);
-        toast.error(error.message);
-      } else console.error("an error occurred during the player registration process", error);
       toast.error("an error occurred during the player registration process");
     }
   };
@@ -112,9 +71,7 @@ export default function PlayerForm({ teams }: { teams: Team[] }) {
           ))}
         </select>
 
-        <button disabled={isSubmitting} type="submit">
-          {isSubmitting ? "adding player..." : "add Player"}
-        </button>
+        <SubmitButton isSubmitting={isSubmitting} text="add player" />
       </form>
     </div>
   );
