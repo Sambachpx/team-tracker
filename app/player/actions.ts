@@ -11,7 +11,7 @@ export const addPlayer = async (data: TPlayerFormFields) => {
     throw new Error("invalid form data");
   }
 
-  const { firstName, lastName, salary, teamId, image } = validatedData.data;
+  const { firstName, lastName, salary, team } = validatedData.data;
 
   try {
     const player = await prisma.player.create({
@@ -19,8 +19,7 @@ export const addPlayer = async (data: TPlayerFormFields) => {
         firstName,
         lastName,
         salary,
-        teamId,
-        image,
+        teamId: Number(team),
       },
     });
 
@@ -53,7 +52,7 @@ export const updatePlayer = async (id: number, data: TPlayerFormFields) => {
     throw new Error("invalid form data");
   }
 
-  const { firstName, lastName, salary, teamId, image } = validatedData.data;
+  const { firstName, lastName, salary, team } = validatedData.data;
 
   try {
     const player = await prisma.player.update({
@@ -64,8 +63,7 @@ export const updatePlayer = async (id: number, data: TPlayerFormFields) => {
         firstName,
         lastName,
         salary,
-        teamId,
-        image,
+        teamId: Number(team),
       },
     });
 

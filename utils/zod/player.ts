@@ -4,8 +4,8 @@ export const playerFormSchema = z.object({
   firstName: z.string().min(1, "first name is required"),
   lastName: z.string().min(1, "first name is required"),
   salary: z.coerce.number().min(0, "salary must be a positive number"),
-  teamId: z.coerce.number().int().min(1, "team is required"), // TODO: change is not teamId but list of teams
-  image: z.string().url("image must be a valid url"),
+  team: z.string().min(1, "team is required"),
+  // image: z.string().url("image must be a valid url"),
 });
 
 export type TPlayerFormFields = z.infer<typeof playerFormSchema>;

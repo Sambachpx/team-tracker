@@ -41,7 +41,7 @@ export default function RegisterPage() {
 
   return (
     <div>
-      <Toaster position="bottom-right" />
+      <Toaster position="bottom-right" richColors />
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormInput
           label="email"

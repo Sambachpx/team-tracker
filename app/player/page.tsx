@@ -1,20 +1,37 @@
-"use client";
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Toaster, toast } from "sonner";
 import FormInput from "@/components/FormInput";
 import { playerFormSchema } from "@/utils/zod/player";
 import type { TPlayerFormFields } from "@/utils/zod/player";
-import { useEffect, useState } from "react";
 import type { Team } from "@prisma/client";
 import { addPlayer } from "./actions";
 import { getTeams } from "../team/actions";
 
-export default function PlayerForm() {
-  const [teams, setTeams] = useState<Team[]>([]);
+export async function remplace() {
+  try {
+    const teams = await getTeams();
 
-  useEffect(() => {
+    return {
+      props: {
+        teams,
+      },
+    };
+  } catch (error) {
+    console.error("error :", error);
+
+    return {
+      props: {
+        teams: [],
+      },
+    };
+  }
+}
+
+export default function PlayerForm({ teams }: { teams: Team[] }) {
+  // const [teamss, setTeams] = useState<Team[]>([]);
+
+  /* useEffect(() => {
     const fetchTeams = async () => {
       try {
         const teamsData = await getTeams();
@@ -24,9 +41,12 @@ export default function PlayerForm() {
         toast.error("Failed to load teams");
       }
     };
+    
 
     fetchTeams().catch((e) => console.error("error fetching teams:", e));
   }, []);
+
+  */
 
   const {
     register,
@@ -52,7 +72,7 @@ export default function PlayerForm() {
 
   return (
     <div>
-      <Toaster position="bottom-right" />
+      <Toaster position="bottom-right" richColors />
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormInput
           label="Name"
@@ -84,7 +104,7 @@ export default function PlayerForm() {
           error={errors.salary?.message}
         />
 
-        <select name="team" id="team-select">
+        <select {...register("team")} name="team" id="team-select">
           {teams.map((team) => (
             <option key={team.id} value={team.id}>
               {team.name}

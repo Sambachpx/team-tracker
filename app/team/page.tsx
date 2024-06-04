@@ -35,7 +35,7 @@ export default function TeamForm() {
 
   return (
     <div>
-      <Toaster position="bottom-right" />
+      <Toaster position="bottom-right" richColors />
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <FormInput
           label="Name"
