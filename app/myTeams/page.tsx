@@ -1,14 +1,12 @@
-"use client";
+import MyTeamsForm from "@/components/MyTeamsForm";
+import { getTeams } from "../team/actions";
 
-import FetchTeams from "../player/fetchTeams";
+export default async function myTeamsPage() {
+  const teams = await getTeams(1);
 
-export default function UserTeams() {
-  const userId = 1;
-  const teams = FetchTeams(userId);
-
-  if (teams.length === 0) {
-    return <div>vous n`&apos`avez aucune équipe</div>;
-  }
-
-  return <div>{teams.map((team) => team.name).join(", ")}</div>;
+  return (
+    <div>
+      <MyTeamsForm teams={teams} />
+    </div>
+  );
 }
