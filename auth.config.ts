@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -31,23 +32,25 @@ export default {
           throw new Error("invalid password");
         }
 
-        return { ...user, id: user.id.toString() };
+        return { id: user.id.toString(), name: user.name, email: user.email };
       },
     }),
   ],
   callbacks: {
     jwt({ token, user }) {
-      if (user) {
-        return { ...token, id: user.id };
+      if (user && user.id && user.name && user.email) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
       }
 
       return token;
     },
 
     session({ session, token }) {
-      if (token.id && typeof token.id === "string") {
-        return { ...session, user: { ...session.user, id: token.id } };
-      }
+      session.user.email = token.email;
+      session.user.id = token.id;
+      session.user.name = token.name;
 
       return session;
     },

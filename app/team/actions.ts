@@ -6,14 +6,6 @@ import type { TTeamFormFields } from "@/utils/zod/team";
 import { teamFormSchema } from "@/utils/zod/team";
 
 export const addTeam = async (data: TTeamFormFields) => {
-  const validatedData = teamFormSchema.safeParse(data);
-
-  if (!validatedData.success) {
-    throw new Error("invalid form data");
-  }
-
-  const { name } = validatedData.data;
-
   const session = await authHandler();
   console.log("session", session);
   const userId = session?.user?.id;
@@ -21,6 +13,14 @@ export const addTeam = async (data: TTeamFormFields) => {
     throw new Error("user not found");
   }
   console.log("user ID:", userId);
+
+  const validatedData = teamFormSchema.safeParse(data);
+
+  if (!validatedData.success) {
+    throw new Error("invalid form data");
+  }
+
+  const { name } = validatedData.data;
 
   try {
     const existingTeam = await prisma.team.findFirst({
