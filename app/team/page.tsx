@@ -7,7 +7,6 @@ import FormInput from "@/components/FormInput";
 import { teamFormSchema } from "@/utils/zod/team";
 import type { TTeamFormFields } from "@/utils/zod/team";
 import SubmitButton from "@/components/submitButton";
-import { authHandler } from "@/auth";
 import { addTeam } from "./actions";
 
 export default function TeamForm() {
@@ -21,7 +20,8 @@ export default function TeamForm() {
   const onSubmit = async (data: TTeamFormFields) => {
     console.log(data);
     try {
-      const session = await authHandler();
+      // TODO: when i pass the suer id in the request the form no longer works
+      /* const session = await authHandler();
       console.log("session", session);
       const userId = session?.user?.id;
       if (!userId) {
@@ -29,7 +29,8 @@ export default function TeamForm() {
       }
       console.log("user ID:", userId);
 
-      await addTeam({ ...data, userId });
+      */
+      await addTeam(data);
       toast.success("team added successfully");
       reset();
     } catch (error) {

@@ -1,8 +1,3 @@
-/*  <button disabled={isSubmitting} type="submit">
-          {isSubmitting ? "adding player..." : "add Player"}
-        </button>
-        */
-
 interface ISubmitButtonProps {
   isSubmitting: boolean;
   text: string;

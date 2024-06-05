@@ -24,6 +24,7 @@ export const addTeam = async (data: TTeamFormFields) => {
 
     const team = await prisma.team.create({
       data: {
+        userId: 1,
         // userId: Number(data.userId),
         name,
       },
@@ -32,21 +33,6 @@ export const addTeam = async (data: TTeamFormFields) => {
     return team;
   } catch (error) {
     console.error("error addTeam:", error);
-    throw error;
-  }
-};
-
-export const deleteTeam = async (id: number) => {
-  try {
-    const team = await prisma.team.delete({
-      where: {
-        id,
-      },
-    });
-
-    return team;
-  } catch (error) {
-    console.error("error deleteTeam:", error);
     throw error;
   }
 };
@@ -77,13 +63,28 @@ export const updateTeam = async (id: number, data: TTeamFormFields) => {
   }
 };
 
-export const getTeams = async () => {
+export const getTeams = async (userId?: number) => {
   try {
-    const teams = await prisma.team.findMany();
+    const teams = await prisma.team.findMany({
+      where: userId ? { userId } : undefined,
+    });
 
     return teams;
   } catch (error) {
     console.error("error getTeams:", error);
+    throw error;
+  }
+};
+
+export const deleteTeams = async (teamId?: number, userId?: number) => {
+  try {
+    const deleteResult = await prisma.team.deleteMany({
+      where: teamId ? { id: teamId } : { userId },
+    });
+
+    return deleteResult;
+  } catch (error) {
+    console.error("error deleteTeams:", error);
     throw error;
   }
 };
