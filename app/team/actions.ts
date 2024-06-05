@@ -1,5 +1,6 @@
 "use server";
 
+import { authHandler } from "@/auth";
 import { prisma } from "@/utils/prisma/prisma";
 import type { TTeamFormFields } from "@/utils/zod/team";
 import { teamFormSchema } from "@/utils/zod/team";
@@ -13,6 +14,14 @@ export const addTeam = async (data: TTeamFormFields) => {
 
   const { name } = validatedData.data;
 
+  const session = await authHandler();
+  console.log("session", session);
+  const userId = session?.user?.id;
+  if (!userId) {
+    throw new Error("user not found");
+  }
+  console.log("user ID:", userId);
+
   try {
     const existingTeam = await prisma.team.findFirst({
       where: { name },
@@ -24,8 +33,7 @@ export const addTeam = async (data: TTeamFormFields) => {
 
     const team = await prisma.team.create({
       data: {
-        userId: 1,
-        // userId: Number(data.userId),
+        userId: Number(userId),
         name,
       },
     });

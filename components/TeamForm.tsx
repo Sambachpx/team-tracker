@@ -21,15 +21,7 @@ export default function TeamForm() {
     console.log(data);
     try {
       // TODO: when i pass the suer id in the request the form no longer works
-      /* const session = await authHandler();
-      console.log("session", session);
-      const userId = session?.user?.id;
-      if (!userId) {
-        throw new Error("user not found");
-      }
-      console.log("user ID:", userId);
 
-      */
       await addTeam(data);
       toast.success("team added successfully");
       reset();
