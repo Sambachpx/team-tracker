@@ -38,8 +38,7 @@ export default {
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        // eslint-disable-next-line no-param-reassign
-        token.id = user.id;
+        return { ...token, id: user.id };
       }
 
       return token;
@@ -47,8 +46,7 @@ export default {
 
     session({ session, token }) {
       if (token.id && typeof token.id === "string") {
-        // eslint-disable-next-line no-param-reassign
-        session.user.id = token.id;
+        return { ...session, user: { ...session.user, id: token.id } };
       }
 
       return session;

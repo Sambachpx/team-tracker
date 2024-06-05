@@ -71,10 +71,18 @@ export const updateTeam = async (id: number, data: TTeamFormFields) => {
   }
 };
 
-export const getTeams = async (userId?: number) => {
+export const getTeams = async () => {
   try {
+    const session = await authHandler();
+    console.log("session", session);
+    const userId = session?.user?.id;
+    if (!userId) {
+      throw new Error("user not found");
+    }
+    console.log("user ID:", userId);
+
     const teams = await prisma.team.findMany({
-      where: userId ? { userId } : undefined,
+      where: { userId: Number(userId) },
     });
 
     return teams;
