@@ -10,4 +10,3 @@ export default function SubmitButton({ isSubmitting, text }: ISubmitButtonProps)
     </button>
   );
 }
-// camel case

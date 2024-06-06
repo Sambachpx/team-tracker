@@ -12,7 +12,8 @@ export const addTeam = async (data: TTeamFormFields) => {
   if (!userId) {
     throw new Error("user not found");
   }
-  console.log("user ID:", userId);
+
+  console.log("user ID:", userId); // faire fonction pour recuperer user id dans utils
 
   const validatedData = teamFormSchema.safeParse(data);
 
@@ -71,6 +72,59 @@ export const updateTeam = async (id: number, data: TTeamFormFields) => {
   }
 };
 
+// TODO: creer dossier dans player
+
+export const getTeamPlayers = async () => {
+  try {
+    const session = await authHandler();
+    console.log("session", session);
+    const userId = session?.user?.id;
+    if (!userId) {
+      throw new Error("user not found");
+    }
+    console.log("user ID:", userId);
+
+    const userWithTeamsAndPlayers = await prisma.user.findUnique({
+      where: {
+        id: Number(userId),
+      },
+      include: {
+        teams: {
+          include: {
+            players: true,
+          },
+        },
+      },
+    });
+
+    if (!userWithTeamsAndPlayers) {
+      throw new Error("user not found");
+    }
+
+    const players = userWithTeamsAndPlayers.teams.flatMap((team) =>
+      team.players.map((player) => ({ ...player, teamName: { name: team.name }, creator: team.userId }))
+    );
+
+    return players;
+  } catch (error) {
+    console.error("error getTeams:", error);
+    throw error;
+  }
+};
+
+export const deleteTeams = async (teamId?: number, userId?: number) => {
+  try {
+    const deleteResult = await prisma.team.deleteMany({
+      where: teamId ? { id: teamId } : { userId },
+    });
+
+    return deleteResult;
+  } catch (error) {
+    console.error("error deleteTeams:", error);
+    throw error;
+  }
+};
+
 export const getTeams = async () => {
   try {
     const session = await authHandler();
@@ -88,19 +142,6 @@ export const getTeams = async () => {
     return teams;
   } catch (error) {
     console.error("error getTeams:", error);
-    throw error;
-  }
-};
-
-export const deleteTeams = async (teamId?: number, userId?: number) => {
-  try {
-    const deleteResult = await prisma.team.deleteMany({
-      where: teamId ? { id: teamId } : { userId },
-    });
-
-    return deleteResult;
-  } catch (error) {
-    console.error("error deleteTeams:", error);
     throw error;
   }
 };
