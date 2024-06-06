@@ -20,7 +20,7 @@ export default function TeamForm() {
   const onSubmit = async (data: TTeamFormFields) => {
     console.log(data);
     try {
-      // TODO: when i pass the suer id in the request the form no longer works
+      // TODO: when i pass the user id in the request the form no longer works
 
       await addTeam(data);
       toast.success("team added successfully");
