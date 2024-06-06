@@ -1,5 +1,6 @@
 "use server";
 
+import { getUserIdFromSession } from "@/utils/functions";
 import { prisma } from "@/utils/prisma/prisma";
 import type { TPlayerFormFields } from "@/utils/zod/player";
 import { playerFormSchema } from "@/utils/zod/player";
@@ -84,3 +85,60 @@ export const getPlayers = async () => {
     throw error;
   }
 };
+
+export const getPlayer = async (id: number) => {
+  try {
+    const player = await prisma.player.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return player;
+  } catch (error) {
+    console.error("error getPlayer:", error);
+    throw error;
+  }
+};
+
+
+// utiliser que dans la page pas fonctions, pas chnager prisma
+
+// relation user via la team
+
+// pas user mais player where id du user, include team
+
+export default async function fetchTeamsAndPlayers() {
+  try {
+    const userId = await getUserIdFromSession();
+
+    const userWithTeamsAndPlayers = await prisma.player.findMany({
+      where: {
+        team: {
+          user: {
+            id: Number(userId),
+          },
+        },
+      },
+      include: {
+        team: true,
+      },
+    });
+
+    if (!userWithTeamsAndPlayers) {
+      throw new Error("user not found");
+    }
+
+    const players = userWithTeamsAndPlayers.map((player) => ({
+      ...player,
+      teamName: { name: player.team.name },
+      creator: player.team.userId,
+    }));
+
+    return players;
+  } catch (error) {
+    console.error("error getTeams:", error);
+    throw error;
+  }
+}
+

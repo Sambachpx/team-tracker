@@ -1,19 +1,12 @@
 "use server";
 
-import { authHandler } from "@/auth";
+import { getUserIdFromSession } from "@/utils/functions";
 import { prisma } from "@/utils/prisma/prisma";
 import type { TTeamFormFields } from "@/utils/zod/team";
 import { teamFormSchema } from "@/utils/zod/team";
 
 export const addTeam = async (data: TTeamFormFields) => {
-  const session = await authHandler();
-  console.log("session", session);
-  const userId = session?.user?.id;
-  if (!userId) {
-    throw new Error("user not found");
-  }
-
-  console.log("user ID:", userId); // faire fonction pour recuperer user id dans utils
+  const userId = await getUserIdFromSession();
 
   const validatedData = teamFormSchema.safeParse(data);
 
@@ -72,46 +65,6 @@ export const updateTeam = async (id: number, data: TTeamFormFields) => {
   }
 };
 
-// TODO: creer dossier dans player
-
-export const getTeamPlayers = async () => {
-  try {
-    const session = await authHandler();
-    console.log("session", session);
-    const userId = session?.user?.id;
-    if (!userId) {
-      throw new Error("user not found");
-    }
-    console.log("user ID:", userId);
-
-    const userWithTeamsAndPlayers = await prisma.user.findUnique({
-      where: {
-        id: Number(userId),
-      },
-      include: {
-        teams: {
-          include: {
-            players: true,
-          },
-        },
-      },
-    });
-
-    if (!userWithTeamsAndPlayers) {
-      throw new Error("user not found");
-    }
-
-    const players = userWithTeamsAndPlayers.teams.flatMap((team) =>
-      team.players.map((player) => ({ ...player, teamName: { name: team.name }, creator: team.userId }))
-    );
-
-    return players;
-  } catch (error) {
-    console.error("error getTeams:", error);
-    throw error;
-  }
-};
-
 export const deleteTeams = async (teamId?: number, userId?: number) => {
   try {
     const deleteResult = await prisma.team.deleteMany({
@@ -127,13 +80,7 @@ export const deleteTeams = async (teamId?: number, userId?: number) => {
 
 export const getTeams = async () => {
   try {
-    const session = await authHandler();
-    console.log("session", session);
-    const userId = session?.user?.id;
-    if (!userId) {
-      throw new Error("user not found");
-    }
-    console.log("user ID:", userId);
+    const userId = await getUserIdFromSession();
 
     const teams = await prisma.team.findMany({
       where: { userId: Number(userId) },
@@ -142,6 +89,19 @@ export const getTeams = async () => {
     return teams;
   } catch (error) {
     console.error("error getTeams:", error);
+    throw error;
+  }
+};
+
+export const getTeam = async (id: number) => {
+  try {
+    const team = await prisma.team.findFirst({
+      where: { id },
+    });
+
+    return team;
+  } catch (error) {
+    console.error("error getTeam:", error);
     throw error;
   }
 };

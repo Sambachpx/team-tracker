@@ -1,7 +1,7 @@
-import { getTeams } from "@/app/team/actions";
 import PlayerForm from "@/components/PlayerForm";
+import { getTeams } from "../../team/actions";
 
-export default async function EditPlayerPage() {
+export default async function PlayerPage() {
   const teams = await getTeams();
 
   return (
@@ -10,3 +10,4 @@ export default async function EditPlayerPage() {
     </div>
   );
 }
+//  tableau sur /player

@@ -1,6 +1,6 @@
 "use client";
 
-import edit from "@/utils/functions";
+import LinkButton from "@/components/LinkButton";
 import type { ColumnDef } from "@tanstack/react-table";
 
 export type Team = {
@@ -8,6 +8,7 @@ export type Team = {
 };
 
 export type Players = {
+  id: number;
   firstName: string;
   lastName: string;
   salary: number;
@@ -40,10 +41,6 @@ export const columns: ColumnDef<Players>[] = [
   {
     accessorKey: "edit",
     header: "Edit",
-    cell: ({ row }) => (
-      <button type="button" onClick={() => edit(row.original)}>
-        Edit
-      </button>
-    ),
+    cell: ({ row }) => <LinkButton href={`/player/${row.original.id}/edit`}>edit</LinkButton>,
   },
 ];

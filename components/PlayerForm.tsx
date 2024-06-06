@@ -11,6 +11,7 @@ import SubmitButton from "./SubmitButton";
 
 interface IPlayerFormProps {
   teams: { id: number; name: string; userId: number | null }[];
+  player?: TPlayerFormFields;
 }
 
 export default function PlayerForm({ teams }: IPlayerFormProps) {
@@ -77,3 +78,12 @@ export default function PlayerForm({ teams }: IPlayerFormProps) {
     </div>
   );
 }
+/* useEffect(() => {
+    if (player) {
+      setValue("firstName", player.firstName);
+      setValue("lastName", player.lastName);
+      setValue("salary", player.salary);
+      setValue("team", player.team);
+    }
+  }, [player, setValue]);
+*/

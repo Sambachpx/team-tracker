@@ -1,12 +1,14 @@
-import PlayerForm from "@/components/PlayerForm";
-import { getTeams } from "../team/actions";
+import { DataTable } from "@/components/ui/Data-table";
 
-export default async function PlayerPage() {
-  const teams = await getTeams();
+import { columns } from "./columns";
+import fetchTeamsAndPlayers from "./actions";
+
+export default async function MyTeamsAndPlayersPage() {
+  const data = await fetchTeamsAndPlayers();
 
   return (
-    <div>
-      <PlayerForm teams={teams} />
+    <div className="container mx-auto py-10">
+      <DataTable columns={columns} data={data} />
     </div>
   );
 }
