@@ -2,10 +2,11 @@
 
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import { addPlayer } from "@/app/player/actions";
+import { addPlayer, updatePlayer } from "@/app/player/actions";
 import { playerFormSchema } from "@/utils/zod/player";
 import type { TPlayerFormFields } from "@/utils/zod/player";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import FormInput from "./FormInput";
 import SubmitButton from "./SubmitButton";
 
@@ -14,19 +15,34 @@ interface IPlayerFormProps {
   player?: TPlayerFormFields;
 }
 
-export default function PlayerForm({ teams }: IPlayerFormProps) {
+export default function PlayerForm({ teams, player }: IPlayerFormProps) {
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<TPlayerFormFields>({ resolver: zodResolver(playerFormSchema) });
 
+  useEffect(() => {
+    if (player) {
+      setValue("firstName", player.firstName);
+      setValue("lastName", player.lastName);
+      setValue("salary", player.salary);
+      setValue("team", player.team);
+    }
+  }, [player, reset, setValue]);
+
   const onSubmit = async (data: TPlayerFormFields) => {
     try {
-      await addPlayer(data);
-      toast.success("player added successfully");
-      reset();
+      if (player) {
+        await updatePlayer(player, data);
+        toast.success("player updated successfully");
+      } else {
+        await addPlayer(data);
+        toast.success("player added successfully");
+        reset();
+      }
     } catch (error) {
       toast.error("an error occurred during the player registration process");
     }
@@ -73,7 +89,7 @@ export default function PlayerForm({ teams }: IPlayerFormProps) {
           ))}
         </select>
 
-        <SubmitButton isSubmitting={isSubmitting} text="add player" />
+        <SubmitButton isSubmitting={isSubmitting} text={player ? "update player" : "add player"} />
       </form>
     </div>
   );
