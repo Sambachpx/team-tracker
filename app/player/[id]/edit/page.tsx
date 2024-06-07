@@ -22,9 +22,14 @@ export default async function EditPlayerPage(props: IEditPlayerPageProps) {
     return notFound();
   }
 
+  const playerWithTeam = {
+    ...player,
+    team: player.teamId.toString(),
+  };
+
   return (
     <div>
-      <PlayerForm teams={teams} player={player} />
+      <PlayerForm teams={teams} player={playerWithTeam} />
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default async function Home() {
         {session && session.user ? (
           <>
             {`welcome to Team-tracker ${session.user.name}`}
-            <LinkButton href="/player">create a player</LinkButton>
+            <LinkButton href="/player/create">create a player</LinkButton>
             <LinkButton href="/team">create a team</LinkButton>
             <LinkButton href="/player">view my players & teams</LinkButton>
           </>
