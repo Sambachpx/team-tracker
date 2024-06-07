@@ -22,7 +22,13 @@ export default function PlayerForm({ teams, player }: IPlayerFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<TPlayerFormFields>({
     resolver: zodResolver(playerFormSchema),
-    defaultValues: player ? { ...player } : {},
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      salary: 0,
+      team: undefined,
+      ...player,
+    },
   });
 
   const onSubmit = async (data: TPlayerFormFields) => {

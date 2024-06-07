@@ -39,6 +39,8 @@ export const deletePlayer = async (id: number) => {
       },
     });
 
+    // toast pour la conformation
+
     return player;
   } catch (error) {
     console.error("error deletePlayer:", error);
