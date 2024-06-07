@@ -101,12 +101,7 @@ export const getPlayer = async (id: number) => {
   }
 };
 
-
 // utiliser que dans la page pas fonctions, pas chnager prisma
-
-// relation user via la team
-
-// pas user mais player where id du user, include team
 
 export default async function fetchTeamsAndPlayers() {
   try {
@@ -141,4 +136,3 @@ export default async function fetchTeamsAndPlayers() {
     throw error;
   }
 }
-

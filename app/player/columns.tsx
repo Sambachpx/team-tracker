@@ -1,7 +1,9 @@
 "use client";
 
 import LinkButton from "@/components/LinkButton";
+import { Button } from "@/components/ui/Button";
 import type { ColumnDef } from "@tanstack/react-table";
+import { deletePlayer } from "./actions";
 
 export type Team = {
   name: string;
@@ -42,5 +44,10 @@ export const columns: ColumnDef<Players>[] = [
     accessorKey: "edit",
     header: "Edit",
     cell: ({ row }) => <LinkButton href={`/player/${row.original.id}/edit`}>edit</LinkButton>,
+  },
+  {
+    accessorKey: "delete",
+    header: "Delete",
+    cell: ({ row }) => <Button onClick={() => deletePlayer(row.original.id)}>delete</Button>,
   },
 ];

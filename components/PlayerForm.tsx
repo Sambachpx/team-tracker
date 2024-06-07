@@ -6,13 +6,12 @@ import { addPlayer, updatePlayer } from "@/app/player/actions";
 import { playerFormSchema } from "@/utils/zod/player";
 import type { TPlayerFormFields } from "@/utils/zod/player";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import FormInput from "./FormInput";
 import SubmitButton from "./SubmitButton";
 
 interface IPlayerFormProps {
   teams: { id: number; name: string; userId: number | null }[];
-  player?: TPlayerFormFields;
+  player?: TPlayerFormFields & { id: number }; // ajout id
 }
 
 export default function PlayerForm({ teams, player }: IPlayerFormProps) {
@@ -20,35 +19,16 @@ export default function PlayerForm({ teams, player }: IPlayerFormProps) {
     register,
     handleSubmit,
     reset,
-    setValue,
-
     formState: { errors, isSubmitting },
   } = useForm<TPlayerFormFields>({
     resolver: zodResolver(playerFormSchema),
-    defaultValues: player
-      ? {
-          firstName: player.firstName,
-          lastName: player.lastName,
-          salary: player.salary,
-          team: player.team,
-        }
-      : { firstName: "", lastName: "", salary: 0, team: teams.length > 0 ? teams[0].id.toString() : undefined },
+    defaultValues: player ? { ...player } : {},
   });
-
-  useEffect(() => {
-    if (player) {
-      reset({
-        firstName: player.firstName,
-        lastName: player.lastName,
-        salary: player.salary,
-        team: player.team,
-      });
-    }
-  }, [player, reset, setValue]);
 
   const onSubmit = async (data: TPlayerFormFields) => {
     try {
-      if (player && player.id) {
+      if (player) {
+        // un seul if doit suffire
         await updatePlayer(player.id, data);
         toast.success("player updated successfully");
       } else {
