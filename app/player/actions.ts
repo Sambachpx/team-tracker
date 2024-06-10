@@ -138,3 +138,20 @@ export default async function fetchTeamsAndPlayers() {
     throw error;
   }
 }
+
+export const deletePlayers = async (ids: number[]) => {
+  try {
+    const players = await prisma.player.deleteMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+    });
+
+    return players;
+  } catch (error) {
+    console.error("error deletePlayers:", error);
+    throw error;
+  }
+};

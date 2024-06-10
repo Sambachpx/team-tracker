@@ -9,6 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "./FormInput";
 import SubmitButton from "./SubmitButton";
 
+// delete arlet dialog
+// qd je select element tableau delete en dehors du tableau (delete 2)
+
 interface IPlayerFormProps {
   teams: { id: number; name: string; userId: number | null }[];
   player?: TPlayerFormFields & { id: number }; // ajout id
