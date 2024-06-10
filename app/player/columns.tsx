@@ -5,18 +5,7 @@ import LinkButton from "@/components/LinkButton";
 import { Button } from "@/components/ui/Button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import { AlertDialogHeader, AlertDialogFooter } from "@/components/ui/Alert-dialog";
-
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@radix-ui/react-alert-dialog";
-import { toast } from "sonner";
+import DeleteConfirmationDialog from "@/components/DeleteConfirmationDialog";
 import { deletePlayer } from "./actions";
 
 export type Team = {
@@ -85,31 +74,20 @@ export const columns: ColumnDef<Players>[] = [
     accessorKey: "delete",
     header: "Delete",
     cell: ({ row }) => (
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button>delete</Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this player and remove their data
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={async () => {
-                await deletePlayer(row.original.id);
-                toast.success("player deleted successfully");
-                window.location.reload();
-              }}
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteConfirmationDialog
+        onConfirm={async () => {
+          await deletePlayer(row.original.id).catch(console.error);
+          // toast.success("Player deleted");
+          window.location.reload();
+        }}
+        title="Are you sure?"
+        description="This action cannot be undone. This will permanently delete this player and remove their data"
+        buttonText="delete"
+      />
     ),
   },
+
+  // remonter info cases coché pour emmener dans la page.tsx, page.tsx,
+  // state is alervisible ternaire
 ];
+// qd je clique sur supprimer faire en dehors du tableau
