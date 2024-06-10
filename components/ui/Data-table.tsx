@@ -40,17 +40,6 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     },
   });
 
-  /* React.useEffect(() => {
-    onRowSelectionChange(rowSelection);
-  }, [rowSelection, onRowSelectionChange]);
-*/
-
-  /* onRowSelectionChange = (selectedRows) => {
-    const selectedRowIds = Object.keys(selectedRows).filter((key) => selectedRows[key]);
-    console.log(selectedRowIds);
-  };
-*/
-
   return (
     <div>
       <div className="rounded-md border">
@@ -117,8 +106,13 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   );
 }
 
-// rescendre
-// dans ma celle j'aurais un bouton qui prend un id et qui va me permettre de supprimer un joueur
-// dans mon wrapper remonter info
-// wrapper qui aplele tableau
-// bouton qui ouvres modales
+/* React.useEffect(() => {
+    onRowSelectionChange(rowSelection);
+  }, [rowSelection, onRowSelectionChange]);
+*/
+
+/* onRowSelectionChange = (selectedRows) => {
+    const selectedRowIds = Object.keys(selectedRows).filter((key) => selectedRows[key]);
+    console.log(selectedRowIds);
+  };
+*/
