@@ -5,8 +5,7 @@ import LinkButton from "@/components/LinkButton";
 import { Button } from "@/components/ui/Button";
 import type { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-import DeleteConfirmationDialog from "@/components/DeleteConfirmationDialog";
-import { deletePlayer } from "./actions";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 
 export type Team = {
   name: string;
@@ -74,20 +73,16 @@ export const columns: ColumnDef<Players>[] = [
     accessorKey: "delete",
     header: "Delete",
     cell: ({ row }) => (
-      <DeleteConfirmationDialog
-        onConfirm={async () => {
-          await deletePlayer(row.original.id).catch(console.error);
-          // toast.success("Player deleted");
-          window.location.reload();
-        }}
+      <ConfirmationDialog
         title="Are you sure?"
         description="This action cannot be undone. This will permanently delete this player and remove their data"
-        buttonText="delete"
       />
     ),
   },
 
+  // getFitter selected row model
+
   // remonter info cases coché pour emmener dans la page.tsx, page.tsx,
   // state is alervisible ternaire
 ];
-// qd je clique sur supprimer faire en dehors du tableau
+// qd je clique sur supprimer faire appraitre en dehors du tableau

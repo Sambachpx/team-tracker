@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 
-import type { ColumnDef, SortingState } from "@tanstack/react-table";
+import type { ColumnDef, RowSelectionState, SortingState } from "@tanstack/react-table";
 import {
   flexRender,
   getCoreRowModel,
@@ -13,6 +13,7 @@ import {
 import * as React from "react";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
+import { deletePlayers } from "@/app/player/actions";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -21,8 +22,8 @@ interface DataTableProps<TData, TValue> {
 
 export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [selectedPlayers, setSelectedPlayers] = React.useState([]);
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+  const isAnyRowSelected = Object.values(rowSelection).some(Boolean);
 
   const table = useReactTable({
     data,
@@ -38,6 +39,17 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
       rowSelection,
     },
   });
+
+  /* React.useEffect(() => {
+    onRowSelectionChange(rowSelection);
+  }, [rowSelection, onRowSelectionChange]);
+*/
+
+  /* onRowSelectionChange = (selectedRows) => {
+    const selectedRowIds = Object.keys(selectedRows).filter((key) => selectedRows[key]);
+    console.log(selectedRowIds);
+  };
+*/
 
   return (
     <div>
@@ -73,6 +85,26 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           </TableBody>
         </Table>
       </div>
+
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={!isAnyRowSelected}
+          onClick={async () => {
+            if (isAnyRowSelected) {
+              const selectedRowIds = Object.keys(rowSelection).filter((key) => rowSelection[key]);
+              const selectedRowIdsAsNumbers = selectedRowIds.map(Number);
+
+              await deletePlayers(selectedRowIdsAsNumbers);
+
+              console.log(selectedRowIds);
+            }
+          }}
+        >
+          Delete all
+        </Button>
+      </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
           Previous
@@ -84,3 +116,9 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
     </div>
   );
 }
+
+// rescendre
+// dans ma celle j'aurais un bouton qui prend un id et qui va me permettre de supprimer un joueur
+// dans mon wrapper remonter info
+// wrapper qui aplele tableau
+// bouton qui ouvres modales

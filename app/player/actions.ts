@@ -39,7 +39,7 @@ export const deletePlayer = async (id: number) => {
       },
     });
 
-    // toast pour la conformation
+    // toast pour la confirmation
 
     return player;
   } catch (error) {
