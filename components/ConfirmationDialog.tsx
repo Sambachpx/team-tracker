@@ -17,7 +17,6 @@ interface ConfirmationDialogProps {
 export function ConfirmationDialog({ title, description }: ConfirmationDialogProps) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild />
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
