@@ -106,6 +106,8 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
   );
 }
 
+// fonctions playertablecollone qui renvoie colonnes prend en paramètre
+// buuton onclick = ondeleteclick
 /* React.useEffect(() => {
     onRowSelectionChange(rowSelection);
   }, [rowSelection, onRowSelectionChange]);
