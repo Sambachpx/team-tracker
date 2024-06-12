@@ -20,10 +20,27 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+  onRowSelectionChange,
+  deletePlayer,
+}: DataTableProps<TData, TValue> & {
+  onRowSelectionChange: (rowSelection: RowSelectionState) => void;
+  deletePlayer: (id: number[] | number) => Promise<void>;
+}) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
   const isAnyRowSelected = Object.values(rowSelection).some(Boolean);
+
+  React.useEffect(() => {
+    setRowSelection({});
+  }, [data]);
+
+  const handleRowSelectionChnage = (newRowSelection: RowSelectionState) => {
+    setRowSelection(newRowSelection);
+    onRowSelectionChange(newRowSelection);
+  };
 
   const table = useReactTable({
     data,
