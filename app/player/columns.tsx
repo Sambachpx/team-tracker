@@ -20,8 +20,6 @@ export type Players = {
   teamName: Team;
 };
 
-// recup colonnes du joeur
-
 export function getCollumsPlayer(props: { onClick: (id: number) => void }): ColumnDef<Players>[] {
   return [
     {
@@ -82,10 +80,3 @@ export function getCollumsPlayer(props: { onClick: (id: number) => void }): Colu
     },
   ];
 }
-
-// getFitter selected row model
-
-// remonter info cases coché pour emmener dans la page.tsx, page.tsx,
-// state is alervisible ternaire
-
-// qd je clique sur supprimer faire appraitre en dehors du tableau

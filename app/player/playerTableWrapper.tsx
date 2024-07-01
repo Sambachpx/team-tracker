@@ -4,6 +4,7 @@ import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { DataTable } from "@/components/ui/Data-table";
 import type { RowSelectionState } from "@tanstack/react-table";
 import { useState } from "react";
+import { getCollumsPlayer } from "./columns";
 
 interface PlayerTableWrapperProps {
   deletePlayer: (id: number[] | number) => Promise<void>;
@@ -11,40 +12,36 @@ interface PlayerTableWrapperProps {
 
 export default function PlayerTableWrapper({ deletePlayer }: PlayerTableWrapperProps) {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [selectedRowIds, setSelectedRowIds] = useState<number[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState<number | null>(null);
 
   const handleRowSelectionChange = (newRowSelection: RowSelectionState) => {
     setRowSelection(newRowSelection);
-    setSelectedRowIds(
-      Object.keys(newRowSelection)
-        .filter((key) => newRowSelection[key])
-        .map(Number)
-    );
+  };
+
+  const handleDeleteClick = (id: number) => {
+    setIsDialogOpen(id);
   };
 
   const handleConfirmationClose = async (confirmed: boolean) => {
-    if (confirmed) {
-      await deletePlayer(selectedRowIds);
+    if (confirmed && isDialogOpen !== null) {
+      await deletePlayer(isDialogOpen);
     }
-    setShowConfirmation(false);
+    setIsDialogOpen(null);
   };
 
   return (
     <>
       <DataTable
-        //  columns={}
-        //  data={}
+        columns={getCollumsPlayer({ onClick: handleDeleteClick })}
+        // data={}
         onRowSelectionChange={handleRowSelectionChange}
-        deletePlayer={deletePlayer}
-        onClick={handleDeleteClick}
       />
 
       <ConfirmationDialog
-        isOpen={showConfirmation}
+        isOpen={isDialogOpen !== null}
         onClose={handleConfirmationClose}
         title="Delete Player"
-        description="Are you sure you want to delete the selected player"
+        description="Are you sure you want to delete the selected player?"
       />
     </>
   );

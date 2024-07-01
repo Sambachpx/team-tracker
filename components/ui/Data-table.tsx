@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 
-import type { ColumnDef, RowSelectionState, SortingState } from "@tanstack/react-table";
+import type { ColumnDef, OnChangeFn, RowSelectionState, SortingState } from "@tanstack/react-table";
 import {
   flexRender,
   getCoreRowModel,
@@ -13,21 +13,19 @@ import {
 import * as React from "react";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
-import { deletePlayers } from "@/app/player/actions";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onRowSelectionChange: OnChangeFn<RowSelectionState>;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   onRowSelectionChange,
-  deletePlayer,
 }: DataTableProps<TData, TValue> & {
   onRowSelectionChange: (rowSelection: RowSelectionState) => void;
-  deletePlayer: (id: number[] | number) => Promise<void>;
 }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
@@ -37,7 +35,7 @@ export function DataTable<TData, TValue>({
     setRowSelection({});
   }, [data]);
 
-  const handleRowSelectionChnage = (newRowSelection: RowSelectionState) => {
+  const handleRowSelectionChange = (newRowSelection: RowSelectionState) => {
     setRowSelection(newRowSelection);
     onRowSelectionChange(newRowSelection);
   };
@@ -49,7 +47,7 @@ export function DataTable<TData, TValue>({
     onSortingChange: setSorting,
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: handleRowSelectionChange,
 
     state: {
       sorting,
@@ -93,21 +91,7 @@ export function DataTable<TData, TValue>({
       </div>
 
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={!isAnyRowSelected}
-          onClick={async () => {
-            if (isAnyRowSelected) {
-              const selectedRowIds = Object.keys(rowSelection).filter((key) => rowSelection[key]);
-              const selectedRowIdsAsNumbers = selectedRowIds.map(Number);
-
-              await deletePlayers(selectedRowIdsAsNumbers);
-
-              console.log(selectedRowIds);
-            }
-          }}
-        >
+        <Button variant="outline" size="sm" disabled={!isAnyRowSelected}>
           Delete all
         </Button>
       </div>
