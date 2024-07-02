@@ -4,6 +4,7 @@ import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { DataTable } from "@/components/ui/Data-table";
 import type { RowSelectionState } from "@tanstack/react-table";
 import { useState } from "react";
+import { Button } from "@/components/ui/Button";
 import type { Players } from "./columns";
 import { getCollumsPlayer } from "./columns";
 
@@ -13,7 +14,7 @@ interface PlayerTableWrapperProps {
 }
 
 export default function PlayerTableWrapper({ deletePlayers, data }: PlayerTableWrapperProps) {
-  const [, setRowSelection] = useState<RowSelectionState>({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [isDialogOpen, setIsDialogOpen] = useState<number[] | null>(null);
 
   const handleRowSelectionChange = (newState: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
@@ -22,6 +23,15 @@ export default function PlayerTableWrapper({ deletePlayers, data }: PlayerTableW
 
   const handleDeleteClick = (id: number[]) => {
     setIsDialogOpen(id);
+  };
+
+  const handleDeleteAllClick = () => {
+    const selectedIds = Object.keys(rowSelection)
+      .filter((key) => rowSelection[key])
+      .map(Number);
+    if (selectedIds.length > 0) {
+      setIsDialogOpen(selectedIds);
+    }
   };
 
   const handleConfirmationClose = async (confirmed: boolean) => {
@@ -45,6 +55,15 @@ export default function PlayerTableWrapper({ deletePlayers, data }: PlayerTableW
         title="Delete Player"
         description="Are you sure you want to delete the selected player?"
       />
+
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleDeleteAllClick}
+        disabled={Object.keys(rowSelection).length === 0}
+      >
+        Delete all
+      </Button>
     </>
   );
 }
