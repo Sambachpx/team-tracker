@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/Button";
-
 import type { ColumnDef, OnChangeFn, RowSelectionState, SortingState } from "@tanstack/react-table";
 import {
   flexRender,
@@ -11,7 +10,6 @@ import {
   getPaginationRowModel,
 } from "@tanstack/react-table";
 import * as React from "react";
-
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
 
 interface DataTableProps<TData, TValue> {
@@ -20,13 +18,7 @@ interface DataTableProps<TData, TValue> {
   onRowSelectionChange: OnChangeFn<RowSelectionState>;
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-  onRowSelectionChange,
-}: DataTableProps<TData, TValue> & {
-  onRowSelectionChange: (rowSelection: RowSelectionState) => void;
-}) {
+export function DataTable<TData, TValue>({ columns, data, onRowSelectionChange }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
   const isAnyRowSelected = Object.values(rowSelection).some(Boolean);
@@ -35,9 +27,11 @@ export function DataTable<TData, TValue>({
     setRowSelection({});
   }, [data]);
 
-  const handleRowSelectionChange = (newRowSelection: RowSelectionState) => {
-    setRowSelection(newRowSelection);
-    onRowSelectionChange(newRowSelection);
+  const handleRowSelectionChange = (
+    rowSelectionUpdater: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)
+  ) => {
+    setRowSelection(rowSelectionUpdater);
+    onRowSelectionChange(rowSelectionUpdater);
   };
 
   const table = useReactTable({
@@ -106,16 +100,3 @@ export function DataTable<TData, TValue>({
     </div>
   );
 }
-
-// fonctions playertablecollone qui renvoie colonnes prend en paramètre
-// buuton onclick = ondeleteclick
-/* React.useEffect(() => {
-    onRowSelectionChange(rowSelection);
-  }, [rowSelection, onRowSelectionChange]);
-*/
-
-/* onRowSelectionChange = (selectedRows) => {
-    const selectedRowIds = Object.keys(selectedRows).filter((key) => selectedRows[key]);
-    console.log(selectedRowIds);
-  };
-*/

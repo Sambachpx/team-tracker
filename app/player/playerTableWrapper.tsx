@@ -4,18 +4,22 @@ import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { DataTable } from "@/components/ui/Data-table";
 import type { RowSelectionState } from "@tanstack/react-table";
 import { useState } from "react";
+import type { Players } from "./columns";
 import { getCollumsPlayer } from "./columns";
 
 interface PlayerTableWrapperProps {
-  deletePlayer: (id: number[] | number) => Promise<void>;
+  deletePlayer: (id: number) => Promise<void>;
+  data: Players[];
 }
 
-export default function PlayerTableWrapper({ deletePlayer }: PlayerTableWrapperProps) {
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+export default function PlayerTableWrapper({ deletePlayer, data }: PlayerTableWrapperProps) {
+  const [, setRowSelection] = useState<RowSelectionState>({});
   const [isDialogOpen, setIsDialogOpen] = useState<number | null>(null);
 
-  const handleRowSelectionChange = (newRowSelection: RowSelectionState) => {
-    setRowSelection(newRowSelection);
+  const handleRowSelectionChange = (
+    updaterOrValue: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)
+  ) => {
+    setRowSelection(updaterOrValue);
   };
 
   const handleDeleteClick = (id: number) => {
@@ -33,7 +37,7 @@ export default function PlayerTableWrapper({ deletePlayer }: PlayerTableWrapperP
     <>
       <DataTable
         columns={getCollumsPlayer({ onClick: handleDeleteClick })}
-        // data={}
+        data={data}
         onRowSelectionChange={handleRowSelectionChange}
       />
 
