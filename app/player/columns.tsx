@@ -20,7 +20,7 @@ export type Players = {
   teamName: Team;
 };
 
-export function getCollumsPlayer(props: { onClick: (id: number) => void }): ColumnDef<Players>[] {
+export function getCollumsPlayer(props: { onClick: (id: number[]) => void }): ColumnDef<Players>[] {
   return [
     {
       id: "select",
@@ -74,7 +74,7 @@ export function getCollumsPlayer(props: { onClick: (id: number) => void }): Colu
       header: "Delete",
       cell: ({ row }) => (
         <div>
-          <Button onClick={() => props.onClick(row.original.id)}>Delete</Button>
+          <Button onClick={() => props.onClick([row.original.id])}>Delete</Button>
         </div>
       ),
     },

@@ -8,27 +8,25 @@ import type { Players } from "./columns";
 import { getCollumsPlayer } from "./columns";
 
 interface PlayerTableWrapperProps {
-  deletePlayer: (id: number) => Promise<void>;
+  deletePlayers: (ids: number[]) => Promise<void>;
   data: Players[];
 }
 
-export default function PlayerTableWrapper({ deletePlayer, data }: PlayerTableWrapperProps) {
+export default function PlayerTableWrapper({ deletePlayers, data }: PlayerTableWrapperProps) {
   const [, setRowSelection] = useState<RowSelectionState>({});
-  const [isDialogOpen, setIsDialogOpen] = useState<number | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState<number[] | null>(null);
 
-  const handleRowSelectionChange = (
-    updaterOrValue: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)
-  ) => {
-    setRowSelection(updaterOrValue);
+  const handleRowSelectionChange = (newState: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
+    setRowSelection(newState);
   };
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = (id: number[]) => {
     setIsDialogOpen(id);
   };
 
   const handleConfirmationClose = async (confirmed: boolean) => {
     if (confirmed && isDialogOpen !== null) {
-      await deletePlayer(isDialogOpen);
+      await deletePlayers(isDialogOpen);
     }
     setIsDialogOpen(null);
   };
