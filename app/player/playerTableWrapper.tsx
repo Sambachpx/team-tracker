@@ -1,5 +1,7 @@
 "use client";
 
+// getFilterSlectedRowModel retourne .rows qui est un tableau d'objet
+// dans chaque objet il y a une propriété id qui est un nombre
 import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { DataTable } from "@/components/ui/Data-table";
 import type { RowSelectionState } from "@tanstack/react-table";
@@ -14,10 +16,12 @@ interface PlayerTableWrapperProps {
 }
 
 export default function PlayerTableWrapper({ deletePlayers, data }: PlayerTableWrapperProps) {
+  // TODO: voir sur le net pour le warning
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [isDialogOpen, setIsDialogOpen] = useState<number[] | null>(null);
 
   const handleRowSelectionChange = (newState: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
+    console.log("Row selection changed:", newState);
     setRowSelection(newState);
   };
 
@@ -28,14 +32,14 @@ export default function PlayerTableWrapper({ deletePlayers, data }: PlayerTableW
   const handleDeleteAllClick = () => {
     const selectedIds = Object.keys(rowSelection)
       .filter((key) => rowSelection[key])
-      .map(Number);
-    if (selectedIds.length > 0) {
-      setIsDialogOpen(selectedIds);
-    }
+      .map((key) => data[Number(key)].id);
+    console.log("Selected IDs:", selectedIds);
+    setIsDialogOpen(selectedIds);
   };
 
   const handleConfirmationClose = async (confirmed: boolean) => {
     if (confirmed && isDialogOpen !== null) {
+      console.log("Deleting players with IDs:", isDialogOpen);
       await deletePlayers(isDialogOpen);
     }
     setIsDialogOpen(null);

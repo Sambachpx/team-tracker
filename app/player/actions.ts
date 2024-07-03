@@ -141,6 +141,7 @@ export default async function fetchTeamsAndPlayers() {
 
 export const deletePlayers = async (ids: number[]) => {
   try {
+    console.log("Deleting players:", ids);
     const players = await prisma.player.deleteMany({
       where: {
         id: {
@@ -148,6 +149,8 @@ export const deletePlayers = async (ids: number[]) => {
         },
       },
     });
+
+    console.log("Players deleted:", players);
 
     return players;
   } catch (error) {
