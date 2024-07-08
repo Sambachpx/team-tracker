@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/Button";
 import type { ColumnDef, OnChangeFn, RowSelectionState, SortingState } from "@tanstack/react-table";
 import {
@@ -8,6 +6,7 @@ import {
   useReactTable,
   getSortedRowModel,
   getPaginationRowModel,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
 import * as React from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
@@ -16,9 +15,15 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowSelectionChange: OnChangeFn<RowSelectionState>;
+  onTableInstanceChange: (table: ReturnType<typeof useReactTable<TData>>) => void; // Add this prop
 }
 
-export function DataTable<TData, TValue>({ columns, data, onRowSelectionChange }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+  columns,
+  data,
+  onRowSelectionChange,
+  onTableInstanceChange,
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
   const isAnyRowSelected = Object.values(rowSelection).some(Boolean);
@@ -34,7 +39,7 @@ export function DataTable<TData, TValue>({ columns, data, onRowSelectionChange }
     onRowSelectionChange(rowSelectionUpdater);
   };
 
-  const table = useReactTable({
+  const table = useReactTable<TData>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -42,12 +47,16 @@ export function DataTable<TData, TValue>({ columns, data, onRowSelectionChange }
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onRowSelectionChange: handleRowSelectionChange,
-
+    getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
       rowSelection,
     },
   });
+
+  React.useEffect(() => {
+    onTableInstanceChange(table);
+  }, [table, onTableInstanceChange]);
 
   return (
     <div>

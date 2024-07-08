@@ -1,10 +1,8 @@
 "use client";
 
-// getFilterSlectedRowModel retourne .rows qui est un tableau d'objet
-// dans chaque objet il y a une propriété id qui est un nombre
 import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { DataTable } from "@/components/ui/Data-table";
-import type { RowSelectionState } from "@tanstack/react-table";
+import type { RowSelectionState, useReactTable } from "@tanstack/react-table";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import type { Players } from "./columns";
@@ -16,9 +14,9 @@ interface PlayerTableWrapperProps {
 }
 
 export default function PlayerTableWrapper({ deletePlayers, data }: PlayerTableWrapperProps) {
-  // TODO: voir sur le net pour le warning
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [isDialogOpen, setIsDialogOpen] = useState<number[] | null>(null);
+  const [tableInstance, setTableInstance] = useState<ReturnType<typeof useReactTable<Players>> | null>(null);
 
   const handleRowSelectionChange = (newState: RowSelectionState | ((old: RowSelectionState) => RowSelectionState)) => {
     console.log("Row selection changed:", newState);
@@ -30,11 +28,11 @@ export default function PlayerTableWrapper({ deletePlayers, data }: PlayerTableW
   };
 
   const handleDeleteAllClick = () => {
-    const selectedIds = Object.keys(rowSelection)
-      .filter((key) => rowSelection[key])
-      .map((key) => data[Number(key)].id);
-    console.log("Selected IDs:", selectedIds);
-    setIsDialogOpen(selectedIds);
+    if (tableInstance) {
+      const selectedIds = tableInstance.getFilteredSelectedRowModel().rows.map((row) => row.original.id);
+      console.log("Selected IDs:", selectedIds);
+      setIsDialogOpen(selectedIds);
+    }
   };
 
   const handleConfirmationClose = async (confirmed: boolean) => {
@@ -51,6 +49,7 @@ export default function PlayerTableWrapper({ deletePlayers, data }: PlayerTableW
         columns={getCollumsPlayer({ onClick: handleDeleteClick })}
         data={data}
         onRowSelectionChange={handleRowSelectionChange}
+        onTableInstanceChange={setTableInstance}
       />
 
       <ConfirmationDialog
