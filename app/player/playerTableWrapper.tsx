@@ -9,7 +9,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import type { Players } from "./columns";
 import { getCollumsPlayer } from "./columns";
-import { selectedRows } from "./columns";
 
 interface PlayerTableWrapperProps {
   deletePlayers: (ids: number[]) => Promise<void>;
@@ -30,12 +29,13 @@ export default function PlayerTableWrapper({ deletePlayers, data }: PlayerTableW
     setIsDialogOpen(id);
   };
 
-  /* const handleDeleteAllClick = () => {
-    const selectedRows = getSelectedRowModel().rows;
-    const selectedIds = selectedRows.map((row) => row.original.id);
+  const handleDeleteAllClick = () => {
+    const selectedIds = Object.keys(rowSelection)
+      .filter((key) => rowSelection[key])
+      .map((key) => data[Number(key)].id);
+    console.log("Selected IDs:", selectedIds);
     setIsDialogOpen(selectedIds);
   };
-  */
 
   const handleConfirmationClose = async (confirmed: boolean) => {
     if (confirmed && isDialogOpen !== null) {
